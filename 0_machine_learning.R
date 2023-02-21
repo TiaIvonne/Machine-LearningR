@@ -106,7 +106,7 @@ base <- data.frame(varObjBin, temp)
 
 # La variable objetivo se cambia a alfanumerico yes, no
 base$varObjBin <- ifelse(base$varObjBin == 1, "Yes", "No")
-knitr::kable(head(base), "pipe") %>% kable_styling(latex_options="scale_down")
+
 
 
 ## ---- chunk-0seleccion ----
@@ -227,3 +227,4 @@ plot.roc(roc(response = salida_logi$obs, predictor = salida_logi$Yes),
 
 
 
+summary(logistica)

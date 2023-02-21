@@ -30,7 +30,7 @@ partiendo de un modelo "básico" utilizando las variables previamente
 seleccionadas con stepwise y al final de este apartado realizando pruebas de
 tunning sobre el tamaño muestral del dataset dengue.
 
-Primer modelo de bagging con variables previamente seleccionadas
+Primer modelo de bagging con variables previamente seleccionadas:
 
 \tiny
 
@@ -44,7 +44,7 @@ knitr::kable(bagging$results, "pipe")
 \normalsize
 
 A continuación se explora el Out of bag error para este modelo, buscando
-parámetros para optimizacion, tal como lo indican los apuntes, se debe utilizar
+parámetros para optimización, tal como lo indican los apuntes, se debe utilizar
 la función de randonForest() para extraer los datos y presentar gráfico:
 
 \tiny
@@ -100,7 +100,7 @@ mejores métricas:
 
 **Observaciones**
 
--   De todo el grupo y descartando bagging_base que no se considera, los mejores
+-   Observando todo el grupo evaluado y descartando bagging_base que no se considera, los mejores
     resultados están entre bagging 1250 y bagging1500. Para comparar modelos en
     el apartado final incluyendo los modelos de random forest se deja el modelo
     medias9.
@@ -182,10 +182,10 @@ ntree = 500
 
 Utilizando la función genera_gráficos() se generan los gráficos para realizar
 comparación de medias y evaluar los modelos
-
+\tiny
 ```{r chunk-rf5, eval=TRUE, echo=TRUE, out.width="50%", fig.align='center', results='hide'}
 ```
-
+\normalsize
 Observaciones:
 
--  De los algoritmos evaluados hasta el momento, randomforest (que muestra mas varianza comparado con los otros algoritmos) y bagging son los que muestran mejor rendimiento en AUC y tasa de fallos, dejando atrás las regresiones logísticas y las redes neuronales.
+-  De los algoritmos evaluados hasta ahora, randomforest y bagging son los que muestran mejor rendimiento en AUC y tasa de fallos, dejando atrás las regresiones logísticas y las redes neuronales.

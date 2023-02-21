@@ -18,11 +18,11 @@ editor_options:
 Como practica adicional se ha decidido realizar un modelado con autoML utilizando la librería h2o para python, utilizando un jupyter notebook para este fin. 
 
 El notebook se puede revisar en detalle en:
-<https://github.com/TiaIvonne/MasterUCM-MachineLearningR/blob/master/h2o%20python/autoML_dengue.ipynb>
+<https://github.com/TiaIvonne/Machine-LearningR/blob/master/h2o%20python/autoML_dengue.ipynb>
 
-El primer paso ha sido generar un modelo de autoML que determine cual combinacion es la mas adecuada para el set de datos dengue.
+El primer paso ha sido generar un modelo de autoML que determine cual combinación es la mas adecuada para el set de datos dengue y buscar si hay coincidencias con la practica realizada con R.
 
-En segundo lugar y con el modelo ganador escogido anteriormente, se hace un training del modelo para comparar resultados con los obtenidos en R
+Para autoML la mejor combinación es utilizar un Xgboost el cual coincide con los resultados de esta practica (a pesar de que se dio por ganador a un random forest) con metricas de buena calidad y similares a las obtenidas con R.
 
 
 

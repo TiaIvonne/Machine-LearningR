@@ -169,8 +169,8 @@ xgbm3$bestTune
 plot(xgbm3)
 
 # Importancia de variables
-varImp(xgbm3)
-plot(varImp(xgbm3))
+
+plot(xgbm3)
 
 ## ---- chunk-tuneoxgboost2 ---
 # Solo con las variables seleccionadas en stepwise

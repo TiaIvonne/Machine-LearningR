@@ -30,7 +30,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 **Nota:** El código completo de la practica de ensamblados se encuentra en el
 siguiente repositorio de GitHub, para no extender innecesariamente el reporte:
-<https://github.com/TiaIvonne/MasterUCM-MachineLearningR/blob/master/5_Ensamblado.R>
+<https://github.com/TiaIvonne/Machine-LearningR/blob/master/5_Ensamblado.R>
 
 ## Preparacion del ensamblado con *caret ensemble*
 
@@ -82,7 +82,7 @@ Se define semilla, variables y repeticiones
 ### Paso 3, aplicacion de la funcion cruzadas ensamblado
 
 Con los datos obtenidos del proceso de tunning se construyen las nuevas medias a
-evaluar bajo la funcion "cruzadas ensamblado binaria fuente.R".
+evaluar bajo la función "cruzadas ensamblado binaria fuente.R".
 
 Solo se adjunta una muestra del código generado
 
@@ -120,13 +120,13 @@ medias3bis$modelo<-"randomforest"
 predi3<-as.data.frame(medias_3[2])
 predi3$rf<-predi3$Yes
 
-# Se ha omitido el resto del codigo
+# Se ha omitido el resto del código
 ```
 
 \normalsize
 
 Con la función genera graficos y una vez calculadas las medias en el proceso
-anterior se obtiene el grafico de cajas respectivo: \tiny
+anterior se obtiene el gráfico de cajas respectivo: \tiny
 
 ```{r chunk-ensamblado3, eval=FALSE, echo=TRUE, fig.align='center', out.width="50%"}
 ```
@@ -136,7 +136,7 @@ anterior se obtiene el grafico de cajas respectivo: \tiny
 ### Paso 4, construccion del ensamblado
 
 Con las predicciones obtenidas en las respectivas variables predi1, predi2,
-predi3 etc se crean los ensamblados. Solo se adjunta una muestra del codigo
+predi3 etc se crean los ensamblados. Solo se adjunta una muestra del código
 
 \tiny
 
@@ -158,7 +158,7 @@ unipredi$predi14<-(unipredi$logi+unipredi$svmPoly)/2
 
 ### Paso 5, Procesado de los ensamblados
 
-Solo se adjunta una parte del codigo, se construyen los promedios de tasa de
+Solo se adjunta una parte del código, se construyen los promedios de tasa de
 fallos y AUC.
 
 \tiny
@@ -176,7 +176,7 @@ ordenados
 
 ### Paso 7, tabla con resultados
 
-Se genera tabla con resultados para la tasa de fallos y el area under curve.
+Se genera tabla con resultados para la tasa de fallos y el área under curve.
 **Nota:** Solo se despliegan las primeras salidas para no extender el documento.
 \tiny
 
@@ -186,7 +186,7 @@ Se genera tabla con resultados para la tasa de fallos y el area under curve.
 
 \normalsize
 
-En el punto siguiente se grafica para una mejor visualizacion y toma de decision
+En el punto siguiente se gráfica para una mejor visualización y toma de decisión
 
 ### Paso 8, Boxplot ordenados para comparacion de medias
 
@@ -211,15 +211,15 @@ knitr::include_graphics("./figure/ensamblado_medias0_auc.png")
 En AUC respectivamente los modelos con mayor *accuracy* son predi55, predi57 y
 predi52.
 
-Como se observa en el grafico son demasiados modelos, en el apartado siguiente
-solo se grafican los mejores modelos de ensamblado y se comparan con los
-alfgoritmos sin ensamblar
+Como se observa en el gráfico son demasiados modelos, en el apartado siguiente
+solo se trafican los mejores modelos de ensamblado y se comparan con los
+algoritmos sin ensamblar
 
 ### Paso 9, comparacion de mejores modelos
 
 Los mejores ensamblados son los modelos predi57, predi55, predi52 y predi 60,
-estos se muestran a continuacion comparandolos con los modelos originales sin
-emsamblar
+estos se muestran a continuación comparándolos con los modelos originales sin
+ensamblar
 
 ```{r, fig.align='center', out.width="50%",echo=FALSE}
 knitr::include_graphics("./figure/ensamblado_final.png")
@@ -227,20 +227,21 @@ knitr::include_graphics("./figure/ensamblado_final.png")
 
 ### Paso 10, revision a los mejores ensamblados
 
+\tiny
 ```{r, echo=TRUE, eval=FALSE}
 unipredi$predi55<-(unipredi$rf+unipredi$xgbm+unipredi$svmRadial)/3
 unipredi$predi57<-(unipredi$rf+unipredi$avnnet+unipredi$xgbm)/3
 unipredi$predi60<-(unipredi$rf+unipredi$avnnet+unipredi$svmRadial)/3
 unipredi$predi52<-(unipredi$rf+unipredi$gbm+unipredi$svmRadial)/3
 ```
-
+\normalsize
 En los ensamblados el algoritmo común en los cuatro mejores ensamblados es
 random forest, el mejor ensamblado es el numero 55 que mezcla random forest,
 xgbm y svm radial.
 
 ### Observaciones finales
 
--   De los modelos originales los mejores resultados observando el grafico los
+-   De los modelos originales los mejores resultados observando el gráfico los
     obtiene random forest, xgbm y avnnet, xgbm presenta mas varianza que los dos
     anteriores.
 -   El *accuracy* alcanzado por los ensamblados es mas alto si se compara con
@@ -248,7 +249,7 @@ xgbm y svm radial.
     accuracy, predi57 que es un ensamblado de randomforest con xgbm y svmlineal
     seria el modelo *ganador*. Sin embargo no hay diferencias dramáticas desde
     randomforest hacia adelante y considerando sesgo-varianza, randomforest
-    estaria mostrando mejores resultados que los ensamblados.
+    estaría mostrando mejores resultados que los ensamblados.
 -   La tasa de fallos vs el auc muestra algunas incoherencias, en tasa de fallos
     el numero menor lo obtienen predi55 y predi16 pero en auc los ensamblados
-    predi55 y predi57 respectivamente estan a la cabecera de los resultados.
+    predi55 y predi57 respectivamente están a la cabecera de los resultados.

@@ -29,28 +29,50 @@ knitr::opts_chunk$set(echo = TRUE)
 # Evaluacion del modelo ganador y conclusiones
 
 ## Algoritmo a usar para este modelo
-El algoritmo ganador para esta practica es random forest
+Se ha decidido para esta practica que el algoritmo ganador es *random forest classifier*, los resultados son de los mejores observados en grafico, combinado con AUC y tasa de fallos, presentando resultados competitivos si se compara con los generados via ensamblado, sumado a menor complejidad y costo computacional son los indicadores que han sido considerados para tomar esta decision.
 
 ## Matriz de confusion para el modelo escogido
 \tiny
 ```{r chunk-rf7, echo = TRUE}
 
 ```
-\normalsize
-Agregar conclusiones
+
 
 ## Sensitividad, especificidad y precision
+\tiny
+```{r chunk-rf8, echo = TRUE}
+
+```
+
+\normalsize
+Observando la matriz de confusión, mas los estadísticos se pueden formular algunas 
+observaciones:
+
+- De 1986 registros totales, 1080 están siendo clasificados correctamente como no (es decir no se presencia dengue) y 776 como yes (se observa la presencia de dengue). 82 registros son falsos positivos y 48 falsos negativos. 
+
+- Accuracy obtenida es de 0.93 y considerando la proporción base, las variables estarían mejorando la medida de base.
+
+- Sensitivity/recall: este indicador se observa en un valor de 0.92 lo cual indica que la probabilidad de detectar un valor positivo es alta. Un valor alto de recall indica que existirían menos falsos negativos.
+
+- Specificity: La probabilidad de detectar correctamente los casos negativos 
+es de un valor de 0.94.
+
+- Precision: La probabilidad de acertar en caso de yes es de un 0.95
 
 
+
+
+\normalsize
 ## Tabla de parametros para regresion logistica
 \tiny
 ```{r}
 summary(logistica)
 ```
 \normalsize
-Comentar
+- Observando la tabla de parámetros Ymin e Ymax no son variables relevantes para el modelo a pesar de que fueron seleccionadas previamente siguiendo los pasos de selección de variables con stepwise. 
 
 ## Puntos de corte
+Se prueba cambiando punto de corte de 0.5 a 0.3
 \tiny
 ```{r}
 corte <- 0.3
@@ -59,26 +81,33 @@ salida_rf$predcorte <- as.factor(salida_rf$predcorte)
 confusionMatrix(salida_rf$obs, salida_rf$predcorte, positive = "Yes")
 
 ```
+
+- Solo como experimento adicional, no se observa hay mejora, al contrario, la accuracy desciende de 0.93 a 0.91, pero si ha aumentado la especificidad, se sigue detectando bien los valores negativos. 
+
+
 \normalsize
 ## Contraste de hipotesis entre algunos modelos
 \tiny
 ```{r}
 lista_medias <- rbind(medias1,medias2,medias3, medias4, medias5,medias6, medias11,  medias12,medias13, medias14,medias15, medias16)
-modelos <- c("Logística", "randomforest")
+modelos <- c("xgbm", "randomforest")
 contraste <- lista_medias[which(lista_medias$modelo%in%modelos),]
-resultados <- t.test(contraste$tasa ~contraste$modelo)
+resultados <- t.test(contraste$auc ~contraste$modelo)
 resultados
 ```
 \normalsize
 ## Visualpred
 
-Utilizando el script facilitado en los apuntes comparaciones basicas
+Utilizando el script facilitado en los apuntes se realizan algunas comparaciones básicas con 
+el paquete visualpred.
 
 \tiny
 ```{r, echo=FALSE,out.width="49%",out.height="20%",fig.cap="caption",fig.show='hold',fig.align='center'}
 knitr::include_graphics(c("./varObjBinz.jpg","./varObjBinbox.jpg"))
-                        
 ```
+
+\normalsize
+- En general las clases se separan adecuadamente pero se observan algunas islas de observaciones sin clasificar correctamente. Con un modelado adicional en el script evaluando diferentes modelos y con criterio auc, random forest sigue mostrando buenos resultados y menor varianza que el resto de los modelos.
 \normalsize
 ## Tabla resumen
 Como punto final a esta practica se adjunta tabla resumen con auc y tasa de fallos para cada modelo evaluado 

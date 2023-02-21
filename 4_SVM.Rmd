@@ -160,7 +160,7 @@ modelo versus los generados con los algoritmos anteriores \tiny
 
 Utilizando la función genera_graficos() se despliega el gráfico de comparación
 de medias
-
+\tiny
 ```{r chunk-svmCompara, eval=TRUE, results='hide', out.width="50%", fig.align='center'}
 ```
 

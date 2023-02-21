@@ -27,18 +27,13 @@ knitr::read_chunk("1_redes_neuronales.R")
 
 ### Tunning de redes neuronales
 
-Una vez seleccionada las variables utilizando StepwiseAIC para logística, se
-comienza con el tunning de redes neuronales para un problema de clasificación
-binaria con la finalidad de encontrar los parámetros que se ajusten mejor para
-el dataset con el que se esta trabajando, realizar un nuevo modelamiento y
-comparar en este caso con regresión logística y mas adelante, con los próximos
-algoritmos a modelar (Bagging, Random Forest etc).
+Una vez seleccionada las variables utilizando stepwise visto en la sección anterior, se comienza con el tunning de redes neuronales para un problema de clasificación binaria con la finalidad de encontrar los parámetros que se ajusten mejor para el dataset con el que se está trabajando, realizar un nuevo modelamiento y comparar en este caso con regresión logística y mas adelante, con los próximos algoritmos a modelar (Bagging, Random Forest etc).
 
 ### Tunning de redes neuronales con base accuracy
 
 Utilizando las variables seleccionadas bajo StepwiseAIC se prueba un primer
-modelo: \tiny
-
+modelo: 
+\tiny
 ```{r chunk-redes1, eval=FALSE, echo=TRUE}
 set.seed(12345)
 control_redes <- trainControl(method = "repeatedcv", number=4, repeats=5,
@@ -64,26 +59,22 @@ redavnnet1 <- train(
 ```
 
 \normalsize
-
 Con el código anterior se ha generado la siguiente tabla la cual puede ser de
 utilidad para determinar cuales parámetros podrían ser útiles al momento de
 elegir para entrenar el modelo:
 
 \tiny
-
 ```{r, echo=FALSE, fig.align='center'}
 knitr::kable(redavnnet1$results, "pipe")
 ```
 
 \normalsize
 
-Observando la tabla y con base el Accuracy, los parámetros a considerar son un
-size de 10 con un decay de 0.010 o
+Observando la tabla y con base el Accuracy, los parámetros a considerar son un size de 10 con un decay de 0.010.
 
 \normalsize
 
-Se prueba el modelo otra vez pero con las variables seleccionadas con criterio
-BIC (son solo dos las predictoras mas la variable objetivo)
+Se prueba el modelo una vez mas utilizando las variables seleccionadas con criterio BIC (son solo dos las predictoras mas la variable objetivo)
 
 \tiny
 
@@ -128,7 +119,7 @@ listconti = c("h10pix", "temp90", "trees", "trees90", "Ymin", "Ymax",
 
 data2 <- dengue[,c(listconti, vardep)]
 
-control_maxit <- trainControl(method = "cv", number = 4, savePredictions = "all")
+control_maxit <- trainControl(method = "repeatedcv", number = 4, repeats = 5, savePredictions = "all")
 
 set.seed(12345)
 nnetgrid <-  expand.grid(size = c(5, 10), decay = c(0.01, 0.1, 0.001), bag = F)
@@ -217,7 +208,7 @@ para comparar los modelos creados.
 
 
 \tiny
-```{r chunk-redes6, eval=TRUE, echo=TRUE, out.width="70%", fig.align = 'center', results='hide'}
+```{r chunk-redes6, eval=TRUE, echo=TRUE, out.width="50%", fig.align = 'center', results='hide'}
 genera_graficos(medias1, medias2, medias3, medias4, medias5)
 ```
 
@@ -230,5 +221,5 @@ Observaciones:
     la que se obtuvo con las variables seleccionadas con criterio AIC mas el
     modelo que utilizo los parámetros que entrego el tunning con maxit.
 
--   De todos modos esta es una comparativa inicial y aun se deben entrenar
+-   Recalcar que es una comparativa inicial y aún se deben entrenar
     nuevos algoritmos y modelados para tomar una decisión.

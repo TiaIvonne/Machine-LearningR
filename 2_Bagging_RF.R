@@ -256,10 +256,12 @@ final_randomForest <- train(
 salida_rf <- final_randomForest$pred
 salidarf_conf <- confusionMatrix(salida_rf$pred, salida_rf$obs)
 fourfoldplot(salidarf_conf$table)
+
+## ---- chunk-rf8 ----
 confusionMatrix(salida_rf$pred, salida_rf$obs, mode = "everything")
 
 
-## ---- chunk-rf8 ----
+## ---- chunk-rf9 ----
 # Curva roc
 curvaroc <- roc(salida_rf$obs, salida_rf$Yes)
 auc <- curvaroc$auc
