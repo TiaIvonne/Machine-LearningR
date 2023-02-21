@@ -1,0 +1,163 @@
+---
+title: "anexo_arboles"
+output:
+  pdf_document: 
+    latex_engine: xelatex
+  html_document: default
+date: "2023-02-03"
+lang: "es-ES"
+urlcolor: blue
+editor_options: 
+  markdown: 
+    wrap: 80
+---
+
+```{r include=FALSE, warning=FALSE}
+load('myEnvironment.RData')
+source("anexo_arboles.R")
+knitr::opts_chunk$set(warning = FALSE) 
+knitr::read_chunk("anexo_arboles.R")
+knitr::opts_chunk$set(out.width = "60%") 
+```
+
+## Arboles de clasificacion
+
+### Seleccion de variables
+
+\normalsize
+
+Como complemento al trabajo realizado anteriormente con los algoritmos de ML y
+su posterior evaluación, se ha añadido un apartado de practica modelando arboles
+de clasificación utilizando R y el dataset *dengue*
+
+Primer modelado, modelo con todas las variables del dataset para realizar
+estudio de importancia de variables (que se hizo en el apartado de selección con
+Stepwise pero se prefiere agregarlo a la practica)
+
+Preguntar si en arboles trabajo con las variables que da el modelo o me ajusto a
+lo que dio la selección de variables con stepwise
+
+\tiny
+```{r chunk-arboles1, eval=FALSE, echo=TRUE}
+```
+\normalsize
+Representación gráfica de las variables consideradas relevantes y árbol:
+\tiny
+```{r chunk-arboles2, eval=TRUE, echo=TRUE, fig.align='center', out.width="50%"}
+```
+\normalsize
+Observaciones:
+
+-   Según el gráfico importancia de variables Árbol1, las varibles predictoras
+    mas relevantes serian, h10pix, h10pix90, humid90, Ymin, humid e Ymax.
+
+-   agregar observaciones del árbol
+
+
+Se prueba modelando un nuevo árbol esta vez usando maxsurrogate = 0, solo como complemento puesto que el archivo dengue no contiene datos faltantes: \linebreak
+
+\tiny
+```{r chunk-arboles3, eval=FALSE, echo=TRUE}
+```
+
+\normalsize
+Representación gráfica de las variables consideradas relevantes y árbol:
+
+\tiny
+```{r chunk-arboles4, eval=TRUE, echo=TRUE, fig.align='center', out.width="50%"}
+```
+
+\normalsize
+Observaciones:
+
+-   Según el gráfico importancia de variables Arbol2, las varibles predictoras
+    mas relevantes serian, h10pix e Ymax.
+
+-   agregar observaciones del árbol
+
+### Tunning de algoritmos usando rpart()
+
+De forma inicial se realiza un primer tunning de arboles observando el comporta
+miento de la complejidad del árbol graficando su estructura en relación al parámetro
+minbucket (5, 30 y 60) utilizando la función rpart() \linebreak
+
+\tiny
+```{r chunk-arboles5, eval=FALSE, echo=TRUE}
+```
+
+\normalsize
+
+Representación gráfica del tunning de minbucket \linebreak
+
+\tiny
+```{r chunk-arboles6, eval=TRUE, echo=TRUE}
+```
+
+\normalsize
+Observaciones
+
+Se puede apreciar que con minbucket 5 se genera un modelo complejo y con minbucket 60
+un modelo básico, para encontrar un equilibrio y ver otras opciones de minbucket a continuación se profundiza en el tuneado utilizando caret de R
+
+\normalsize
+### Tunning de algoritmos usando caret() 
+Como indican los apuntes, no se puede realizar tunning en el grid por lo que se
+construye un bucle for() que recorre por cada numero de minbucket indicado y va guardando los resultados para una posterior evaluación: \linebreak
+
+\tiny
+```{r chunk-arboles7, eval=FALSE, echo=TRUE, fig.align="center", message=FALSE}
+```
+\normalsize
+Con el código anterior se genera una tabla para una mejor visualización de los 
+indicadores: \linebreak
+
+\tiny
+```{r chunk-arboles8, eval=TRUE, echo=TRUE, fig.align="center", message=FALSE}
+```
+
+\normalsize
+Como se puede apreciar en la tabla anterior, en combinación entre mejor accuracy y 
+AUC para este modelo es adecuado utilizar un minbucket de 30. Con ese numero se
+realiza la validación cruzada repetida utilizando la función cruzadaarbolbin() \linebreak
+
+\tiny
+```{r chunk-arboles9, eval = FALSE, echo=TRUE}
+```
+
+\normalsize
+Se obtiene la matriz de confusión para este modelo \linebreak
+
+\tiny
+```{r chunk-arboles10, eval=TRUE, echo=TRUE, fig.align='center', out.width="30%"}
+```
+
+\normalsize
+Se obtiene la curva ROC
+
+\tiny
+```{r chunk-arboles11, eval=TRUE, echo=TRUE, fig.align='center', out.width="50%"}
+```
+\normalsize
+
+### Comparacion con otros algoritmos de ML
+Con los resultados obtenidos de entrenar el modelo se realiza la validación cruzada 
+repetida para posteriormente comparar las medias con los demás modelos y evaluar 
+sesgo-varianza
+
+\tiny
+```{r chunk-arboles12, eval=FALSE, echo=TRUE}
+```
+
+\normalsize
+
+Con la función genera_gráficos() se despliega la comparación de medias para los
+distintos algoritmos entrenados
+
+\tiny
+```{r chunk-arboles13, eval=TRUE, echo=TRUE, results='hide', out.width="40%", fig.align='center'}
+```
+
+\normalsize
+Observaciones:
+
+-  Para esta practica en particular, un árbol no es lo suficientemente competitivo frente a otros algoritmos modelados. Presenta mejores indicadores que la regresión logística o una red neuronal pero ante otros algoritmos como bagging o random forest se queda un tanto atrás.

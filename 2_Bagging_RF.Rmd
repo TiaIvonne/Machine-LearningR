@@ -1,0 +1,191 @@
+---
+title: "2_Bagging_RF"
+output:
+  html_document: default
+  pdf_document: 
+    latex_engine: xelatex
+date: "2023-02-03"
+lang: "es-ES"
+urlcolor: blue
+editor_options: 
+  markdown: 
+    wrap: 80
+---
+
+```{r include=FALSE, warning=FALSE}
+load('myEnvironment.RData')
+source("./src/functions/librerias.R")
+knitr::opts_chunk$set(warning = FALSE) 
+knitr::read_chunk("2_Bagging_RF.R")
+```
+
+\normalsize
+
+## Bagging
+
+### Tunning de bagging
+
+En este apartado se probaran algunas técnicas para realizar tunning de bagging,
+partiendo de un modelo "básico" utilizando las variables previamente
+seleccionadas con stepwise y al final de este apartado realizando pruebas de
+tunning sobre el tamaño muestral del dataset dengue.
+
+Primer modelo de bagging con variables previamente seleccionadas
+
+\tiny
+
+```{r chunk-bagging1, eval=FALSE, echo = TRUE}
+```
+
+```{r, eval= TRUE, echo=FALSE}
+knitr::kable(bagging$results, "pipe")
+```
+
+\normalsize
+
+A continuación se explora el Out of bag error para este modelo, buscando
+parámetros para optimizacion, tal como lo indican los apuntes, se debe utilizar
+la función de randonForest() para extraer los datos y presentar gráfico:
+
+\tiny
+
+```{r chunk-bagging2, eval=FALSE, echo = TRUE}
+```
+
+```{r, eval= TRUE, echo=FALSE, out.width="50%", fig.align='center'}
+plot(baggingbis$err.rate[, 1], main = "Out of bag error", ylab = "error")
+```
+
+\normalsize
+
+A partir de las 1000 muestras se estabiliza el error de los datos analizados
+
+### Validacion cruzada repetida para bagging
+
+Se realizan algunas pruebas con validación cruzada repetida utilizando la
+función cruzadarfbin() y cuidando de incluir el parámetro mtry \tiny
+
+```{r chunk-bagging3, eval=FALSE, echo = TRUE}
+```
+
+\normalsize
+
+A continuación y a modo de complemento se prueba a manipular el tamaño muestral
+para observar el efecto sobre bagging utilizando el parámetro sampsize. Para el
+dataset *dengue* son 2000 observaciones con 4 grupos de validación cruzada cada
+grupo contara con 1500 observaciones para probar:
+
+Nota: El bagging medias7 o bagging_base es solo como adicional pues se hace con
+10 grupos de validación cruzada, es solo para observar el efecto y comparar.
+medias8, medias9 y medias10 si se consideran pues utilizan 4 grupos de
+validación y con diversos tamaños muestrales:
+
+\tiny
+
+```{r chunk-bagging4, eval=FALSE, echo = TRUE}
+```
+
+\normalsize
+
+Como parte de este complemento se evalúan las medias con la función
+genera_gráficos() para comparar cual de todos estos tamaños muestrales entrega
+mejores métricas:
+
+\tiny
+
+```{r chunk-bagging5, eval=TRUE, echo = TRUE, out.width="50%", fig.align='center',results='hide'}
+```
+
+\normalsize
+
+**Observaciones**
+
+-   De todo el grupo y descartando bagging_base que no se considera, los mejores
+    resultados están entre bagging 1250 y bagging1500. Para comparar modelos en
+    el apartado final incluyendo los modelos de random forest se deja el modelo
+    medias9.
+
+## Random Forest Classifier
+
+### Tunning de random forest
+
+Primer modelo utilizando todas las variables y buscando las variables
+predictoras mas relevantes.
+
+Nota: Solo como complemento a la practica, para observar como se comporta el
+algoritmo al seleccionar variables. Para comparar medias, validación cruzada y
+probar con diferentes números de arboles se utilizan las variables seleccionadas
+con *stepwise*
+
+\tiny
+
+```{r chunk-rf1, eval=FALSE, echo=TRUE}
+```
+
+\normalsize
+
+Se obtienen los resultados de este primer modelo de randomforest
+
+```{r chunk-rf1bis, out.width="50%", eval= TRUE, fig.align='center', echo=FALSE}
+
+```
+
+Para el modelo anterior el mejor mtry es 9 y en el gráfico se observa que las
+variables predictoras mas relevantes serian: Xmax, h10pix, Ymax, trees90,
+h10pix90, humid, Ymin lo cual difieren a los resultados entregados por la
+selección *stepwise* pero para explorar las alternativas que ofrece el algoritmo
+es útil.
+
+\normalsize
+
+A continuación se prueba generando un bucle for() para buscar los mejores
+indicadores evaluando según el mtry y numero de trees, desde 300 a 2500 para
+observar su comportamiento y buscar los mejores parámetros para la validación
+cruzada:
+
+\tiny
+
+```{r chunk-rf2, eval=FALSE, echo=TRUE}
+```
+
+\tiny
+
+```{r out.width="50%", fig.align='center'}
+dotplot(results)
+```
+
+```{r}
+fit$bestTune
+```
+
+\normalsize
+
+El gráfico dotplot() muestra el accuracy correspondiente a los trees evaluados
+en el ciclo for anterior, con esto los resultados en accuracy son similares pero
+por complejidad se prefiere dejar para pruebas en 500 trees. Para el parámetro
+*bestTune* el mtry es de 4 que también se dejara fijado en la validación
+cruzada.
+
+### Validacion cruzada para random forest
+
+Se genera la validación cruzada para random forest utilizando la función
+cruzadarfbin y los parámetros obtenidos del estudio anterior, con mtry= 4 y
+ntree = 500
+
+\tiny
+
+```{r chunk-rf4, eval=FALSE, echo=TRUE}
+```
+
+\normalsize
+### Comparacion de medias y boxplot
+
+Utilizando la función genera_gráficos() se generan los gráficos para realizar
+comparación de medias y evaluar los modelos
+
+```{r chunk-rf5, eval=TRUE, echo=TRUE, out.width="50%", fig.align='center', results='hide'}
+```
+
+Observaciones:
+
+-  De los algoritmos evaluados hasta el momento, randomforest (que muestra mas varianza comparado con los otros algoritmos) y bagging son los que muestran mejor rendimiento en AUC y tasa de fallos, dejando atrás las regresiones logísticas y las redes neuronales.

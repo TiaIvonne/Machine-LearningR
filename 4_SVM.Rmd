@@ -1,0 +1,172 @@
+---
+title: "4_SVM"
+output:
+  pdf_document: 
+    latex_engine: xelatex
+  html_document: default
+date: "2023-02-03"
+lang: "es-ES"
+urlcolor: blue
+editor_options: 
+  markdown: 
+    wrap: 80
+header-include:
+  - usepackage{graphicx}
+---
+
+```{r include=FALSE, warning=FALSE}
+load('myEnvironment.RData')
+source("./src/functions/librerias.R")
+source("./src/functions/genera_graficos.R")
+knitr::opts_chunk$set(warning = FALSE) 
+knitr::read_chunk("4_SVM.R")
+```
+
+\normalsize
+
+## Support Vector Machines
+
+### Tunning de support vector machines o SVM
+
+#### SVM Lineal
+
+Para el SVM lineal se necesita la constante de regularización C. A continuación
+se construyen un par de modelos buscando un valor C optimo utilizando las
+variables seleccionadas con *stepwise*:
+
+Como en los modelos anteriores, se utiliza el archivo dengue.RDS que contiene
+los datos preprocesados
+
+\tiny
+
+```{r chunk-svmdatos, echo=TRUE, eval=FALSE}
+```
+
+\tiny
+
+```{r chunk-svmlineal1, echo=TRUE, eval=FALSE}
+```
+
+\normalsize
+
+Se muestran los resultados y el gráfico correspondiente
+
+\tiny
+
+```{r chunk-svmlineal2, echo=TRUE, eval=TRUE, out.width="50%", fig.align='center'}
+```
+
+\normalsize
+
+Observando bestTune y el gráfico, para este primer modelado de svm el valor C
+mas adecuado estaría entre 0.20 y 2 (donde se observa mejor *accuracy* en
+tabla), caret en bestTune indica un valor de C de 1 que es también lo que se
+observa en el gráfico. Con este nuevo valor de C se construye otro modelo donde
+se busca si es que hay un mejor valor de C en un grid de 0.1 hasta 1
+
+\tiny
+
+```{r chunk-svmlineal3, echo=TRUE, eval=TRUE}
+```
+
+\normalsize
+
+Se despliegan los resultados \tiny
+
+```{r chunk-svmlineal4, echo=FALSE, eval=TRUE, out.width="50%", fig.align='center'}
+```
+
+\normalsize
+
+Para este dataset con SVM lineal el valor de C mas adecuado seria C=1.
+
+#### SVM Polinomial
+
+En este segundo apartado se utiliza un kernel polinomial buscando el valor de C,
+el grado del polinomio y la escala (C, degree y scale respectivamente), se
+entrena el modelo:
+
+\tiny
+
+```{r chunk-svmPoli1, echo=TRUE, eval=FALSE}
+```
+
+\normalsize
+
+Se despliegan los resultados \tiny
+
+```{r chunk-svmPoli2, echo=FALSE, eval=TRUE, out.width="50%", fig.align='center'}
+```
+
+\normalsize
+
+En los resultados con bestTune se sugiere un degree de 3, scale 2 y un c value
+de 0.5. En el gráfico los mejores resultados en *accuracy* los muestra con
+degree 3, para c value muestra buenos resultados de 0.5 en adelante.
+
+Como los mejores resultados los da el degree 3, se muestra un nuevo gráfico con
+ese grado y realizar observaciones:
+
+\tiny
+
+```{r chunk-svmPoli3, echo=FALSE, eval=TRUE, out.width="50%", fig.align='center'}
+```
+
+\normalsize
+
+En general scale tiende a generar una curva hasta el valor C=0.5 y después
+descender para volver a alcanzar un accuracy alto en C=10. Como un C muy grande
+puede tender al sobreajuste para este dataset es mejor un C 0,5 o 1 y escala 2
+
+#### SVM RBF
+
+En este tercer apartado se agrega al c value el parámetro sigma de
+varianza-escala buscando el valor gamma/sigma mas adecuado para este modelo.
+Gamma: a mayor gamma se puede presentar sobreajuste.
+
+\tiny
+
+```{r chunk-svmRBF1, echo=TRUE, eval=FALSE}
+```
+
+\normalsize
+
+Se despliegan los resultados \tiny
+
+```{r chunk-svmRBF2, echo=FALSE, eval=TRUE, out.width="50%", fig.align='center'}
+```
+
+\normalsize
+
+-   A mayor sigma (10, 30) no se observa que los resultados mejoren en términos
+    de *accuracy.*
+
+-   bestTune recomienda un sigma de 0.5 y un C de 30, pero desde c 1 hasta c 30
+    los resultados se observan relativamente parejos por lo que se mantiene el
+    dejar el valor c en 1 y un sigma de 0.5
+
+### Validacion cruzada para support vector machines
+
+Con los valores obtenidos de svm lineal, polinomial y RBF se realiza la
+validación cruzada para su posterior ploteo y comparación de medias para este
+modelo versus los generados con los algoritmos anteriores \tiny
+
+```{r chunk-svmVC, eval=FALSE, echo=TRUE}
+```
+
+\normalsize
+
+### Comparacion de medias y boxplot
+
+Utilizando la función genera_graficos() se despliega el gráfico de comparación
+de medias
+
+```{r chunk-svmCompara, eval=TRUE, results='hide', out.width="50%", fig.align='center'}
+```
+
+
+\normalsize
+
+**Observaciones**
+
+-   De los tres modelos el que presenta mayor varianza es el modelo polinomial, los resultados en accuracy sobre todo en svmRBF son buenos pero sigue siendo hasta ahora un randomForest o un xgbm (solo observando el gráfico) los que mejores resultados entregan.

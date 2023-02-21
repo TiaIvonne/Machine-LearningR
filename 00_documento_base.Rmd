@@ -1,0 +1,151 @@
+
+---
+title: ' '
+output:
+  pdf_document:
+    number_sections: yes
+  html_document:
+    highlight: tango
+geometry: left = 2.5cm, right = 2cm, top = 2cm, bottom = 2cm
+fontsize: 11pt
+header-includes:
+- \usepackage{float}
+- \usepackage{graphicx}
+- \usepackage{sectsty}
+- \usepackage{paralist}
+- \usepackage{setspace}\spacing{1.}
+- \usepackage{fancyhdr}
+- \usepackage{lastpage}
+- \usepackage{dcolumn}
+- \usepackage{natbib}\bibliographystyle{agsm}
+- \usepackage[nottoc, numbib]{tocbibind}
+lang: es-ES
+urlcolor: blue
+---
+```{r setup, include=FALSE}
+library(knitr)
+opts_chunk$set(cache=F, error = TRUE)
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
+knitr::opts_chunk$set(comment = NA)
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir=getwd())
+options(knitr.duplicate.label = "allow")
+
+```
+
+\allsectionsfont{\centering}
+\subsectionfont{\raggedright}
+\subsubsectionfont{\raggedright}
+
+\pagenumbering{gobble}
+
+\begin{centering}
+\vspace{3cm}
+```{r uni_logo, echo=F, out.width="20%"}
+knitr::include_graphics(normalizePath("./figs/logo.png" ))
+# knitr::include_graphics("logo.png")
+```
+\vspace{1cm}
+
+\Large
+{\bf Universidad Complutense de Madrid}
+
+\Large
+{\bf Master en Big Data y Business Analytics}
+\vspace{1cm}
+
+\Large
+
+\doublespacing
+{\bf MACHINE LEARNING CON R, \\ CLASIFICACION BINARIA}
+
+\vspace{1 cm}
+
+\normalsize
+\singlespacing
+Alumna
+
+\vspace{0.5 cm}
+
+\Large
+
+{\bf Ivonne V. Yáñez Mendoza}
+
+\vspace{0.5 cm}
+
+\normalsize
+\singlespacing
+Profesor
+
+\vspace{0.5 cm}
+
+\Large
+
+{\bf Javier Portela}
+
+\vspace{1.5 cm}
+
+\normalsize
+Enero de 2023
+
+\end{centering}
+
+\pagenumbering{roman}
+
+\newpage
+
+\centering
+\raggedright
+\newpage
+\hypersetup{linkcolor=black}
+\tableofcontents
+
+\newpage
+\pagenumbering{arabic}
+
+
+\newpage
+
+
+```{r methods, child = "01_introduccion.Rmd"}
+```
+
+
+```{r methods, child = '02_depuracion.Rmd'}
+```
+
+
+```{r methods, child = '03_seleccion.Rmd'}
+```
+
+```{r methods, child = "1_redes_neuronales.Rmd"}
+```
+
+```{r methods, child = "2_Bagging_RF.Rmd"}
+```
+
+```{r methods, child = "3_GradientBoosting.Rmd"}
+```
+
+```{r methods, child = "4_SVM.Rmd"}
+```
+
+```{r methods, child= "5_Ensamblado.Rmd"}
+```
+
+```{r methods, child= "6_Conclusiones.Rmd"}
+```
+\appendix
+\pagenumbering{roman}
+
+```{r methods, child = "anexo_seleccion.Rmd"}
+
+```
+
+```{r methods, child ="anexo_arboles.Rmd"}
+```
+
+```{r methods, child="anexo_h2o.Rmd"}
+```
+
+

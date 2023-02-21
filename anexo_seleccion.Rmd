@@ -1,0 +1,121 @@
+---
+title: "anexo_seleccion"
+output:
+  html_document: default
+  pdf_document: 
+    latex_engine: xelatex
+date: "2023-02-03"
+lang: "es-ES"
+urlcolor: blue
+editor_options: 
+  markdown: 
+    wrap: 80
+---
+
+```{r include=FALSE}
+source("anexo_seleccion.R")
+source("./src/functions/genera_graficos.R")
+knitr::read_chunk("anexo_seleccion.R")
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
+
+```
+
+\normalsize
+
+# Anexos
+
+## Otros metodos de seleccion de variables
+
+Como un complemento a la selección de variables de tipo **Stepwise** que se ha
+estudiado en el apartado de selección de variables se ha decidido estudiar otras
+alternativas de selección de features utilizando diversas técnicas que se
+detallan a continuación:
+
+### Utilizando la libreria party y random forest
+
+Un método de selección de variables es utilizando el algoritmo de random forest
+para encontrar un set de predictores, para eso se utiliza la librería *party* y
+se obtienen los siguientes resultados:
+
+\tiny
+
+```{r chunk-party, eval=TRUE}
+
+```
+
+\normalsize
+
+Agregar un comentario
+
+### Utilizando *MARS: Multivariate Adaptive Regression Splines*
+
+Otro método de selección de variables es utilizando MARS, contenida en la
+librería *earth* para R
+
+\tiny
+
+```{r chunk-earth, eval=TRUE, fig.align='center', out.width="50%"}
+```
+
+\normalsize
+
+### Utilizando la libreria Boruta
+
+Boruta es otra librería para realizar *feature selection* de forma automática,
+permitiendo un acercamiento inicial rápido al dataset (con sus ventajas y
+desventajas):
+
+\tiny
+
+```{r chunk-boruta, eval=TRUE, message=FALSE, fig.align='center', out.width="50%"}
+```
+
+\normalsize
+
+Boruta permite revisar si el set de variables a estudiar entran en el modelo o
+podrían entrar de forma tentativa o definitivamente no han sido considerados
+como variables predictoras relevantes con lo cual también se pueden probar otros
+modelos y combinaciones (ej confirmados mas algún tentativo etc)
+
+Para este dataset en particular la selección no marca variables como tentativas
+o descartadas por lo cual correspondería observar el gráfico generado y realizar
+algún corte de tipo manual en las variables.
+
+### Utilizando RFE con caret
+
+Eliminación recursiva de características o RFE en sus siglas en ingles, es un
+estimador que asigna pesos a las características del dataset que se quiere
+estudiar
+
+\tiny
+
+```{r chunk-RFE, eval=TRUE, message=FALSE, warning=FALSE}
+#| cache = TRUE
+```
+
+\normalsize
+
+Con las variables que ha seleccionado el modelo de RFE mas los modelos
+anteriores se prueban con la función cruzadalogistica() y se genera el boxplot
+para comparar:
+
+\tiny
+
+```{r chunk-modelos, eval=FALSE, echo=TRUE}
+```
+
+
+
+```{r figurename, echo=FALSE, fig.cap="my caption", out.width = '50%'}
+
+```
+
+\normalsize
+Conclusiones:
+
+-   A modo general la selección de variables realizada con stepwiseAIC (Logistica1), sigue siendo la que presenta mejor AUC y menor tasa de fallos, ademas de menor varianza por lo que se seguirá trabajando con ese modelo.
+
+
+
+
+

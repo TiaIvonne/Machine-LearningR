@@ -1,0 +1,28 @@
+---
+title: "anexo_h2o"
+output:
+  html_document: default
+  pdf_document: 
+    latex_engine: xelatex
+date: "2023-02-03"
+lang: "es-ES"
+urlcolor: blue
+editor_options: 
+  markdown: 
+    wrap: 80
+---
+
+
+## Libreria h2o para python
+
+Como practica adicional se ha decidido realizar un modelado con autoML utilizando la librería h2o para python, utilizando un jupyter notebook para este fin. 
+
+El notebook se puede revisar en detalle en:
+<https://github.com/TiaIvonne/MasterUCM-MachineLearningR/blob/master/h2o%20python/autoML_dengue.ipynb>
+
+El primer paso ha sido generar un modelo de autoML que determine cual combinacion es la mas adecuada para el set de datos dengue.
+
+En segundo lugar y con el modelo ganador escogido anteriormente, se hace un training del modelo para comparar resultados con los obtenidos en R
+
+
+

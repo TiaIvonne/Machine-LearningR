@@ -1,0 +1,234 @@
+---
+title: "1_redes_neuronales"
+output:
+  html_document: default
+  pdf_document: 
+    latex_engine: xelatex
+date: "2023-02-03"
+lang: "es-ES"
+urlcolor: blue
+editor_options: 
+  markdown: 
+    wrap: 80
+---
+
+```{r include=FALSE, cache = F, warning=FALSE}
+load('myEnvironment.RData')
+source("./src/functions/librerias.R")
+knitr::opts_chunk$set(warning = FALSE) 
+knitr::read_chunk("1_redes_neuronales.R")
+```
+
+\normalsize
+
+# Algoritmos de ML para clasificación binaria
+
+## Redes neuronales
+
+### Tunning de redes neuronales
+
+Una vez seleccionada las variables utilizando StepwiseAIC para logística, se
+comienza con el tunning de redes neuronales para un problema de clasificación
+binaria con la finalidad de encontrar los parámetros que se ajusten mejor para
+el dataset con el que se esta trabajando, realizar un nuevo modelamiento y
+comparar en este caso con regresión logística y mas adelante, con los próximos
+algoritmos a modelar (Bagging, Random Forest etc).
+
+### Tunning de redes neuronales con base accuracy
+
+Utilizando las variables seleccionadas bajo StepwiseAIC se prueba un primer
+modelo: \tiny
+
+```{r chunk-redes1, eval=FALSE, echo=TRUE}
+set.seed(12345)
+control_redes <- trainControl(method = "repeatedcv", number=4, repeats=5,
+    savePredictions = "all")
+
+avnnetgrid <- expand.grid(
+    size = c(5, 10, 15, 20),
+    decay = c(0.01, 0.1, 0.001), bag = FALSE)
+
+# Con las variables seleccionadas stepwiseAIC
+redavnnet1 <- train(
+    varObjBin ~ h10pix + temp90 + trees + trees90 + Ymin + Ymax + temp + 
+    humid + humid90,
+    data = dengue,
+    method = "avNNet", 
+    linout = FALSE, 
+    maxit = 100,
+    trControl = control_redes, 
+    tuneGrid = avnnetgrid,
+    repeats = 5,
+    trace = F)
+
+```
+
+\normalsize
+
+Con el código anterior se ha generado la siguiente tabla la cual puede ser de
+utilidad para determinar cuales parámetros podrían ser útiles al momento de
+elegir para entrenar el modelo:
+
+\tiny
+
+```{r, echo=FALSE, fig.align='center'}
+knitr::kable(redavnnet1$results, "pipe")
+```
+
+\normalsize
+
+Observando la tabla y con base el Accuracy, los parámetros a considerar son un
+size de 10 con un decay de 0.010 o
+
+\normalsize
+
+Se prueba el modelo otra vez pero con las variables seleccionadas con criterio
+BIC (son solo dos las predictoras mas la variable objetivo)
+
+\tiny
+
+```{r chunk-redes2, echo=TRUE, eval=FALSE}
+# Con las variables seleccionadas BIC
+redavnnet2 <- train(
+    varObjBin ~ h10pix + temp90 ,
+    data = data,
+    method = "avNNet", linout = FALSE, maxit = 100,
+    trControl = control_redes, tuneGrid = avnnetgrid,
+    repeats = 5,
+    trace = F)
+
+knitr::kable(redavnnet2$results, "pipe")
+```
+
+\normalsize
+
+La siguiente tabla muestra los resultados con las variables obtenidas con BIC
+\tiny
+
+```{r, echo=FALSE, fig.align='center'}
+knitr::kable(redavnnet1$results, "pipe")
+```
+
+\normalsize
+
+Agregar observaciones
+
+### Tunning de redes neuronales con MAXIT
+
+Otro criterio para realizar tunning de redes neuronales es utilizando un bucle
+for() que recorre un vector llamado listaiter que contiene las iteraciones a
+evaluar, buscando nuevamente los parámetros que podrían ser mas adecuados para
+este set de datos
+
+\tiny
+
+```{r chunk-redes3, eval=FALSE, echo=TRUE}
+listconti = c("h10pix", "temp90", "trees", "trees90", "Ymin", "Ymax",
+    "temp", "humid", "humid90")
+
+data2 <- dengue[,c(listconti, vardep)]
+
+control_maxit <- trainControl(method = "cv", number = 4, savePredictions = "all")
+
+set.seed(12345)
+nnetgrid <-  expand.grid(size = c(5, 10), decay = c(0.01, 0.1, 0.001), bag = F)
+
+completo <-data.frame()
+listaiter<-c(50, 100, 200, 500, 1000, 2000, 3000)
+
+for( iter in listaiter)
+{
+    rednnet<- train(
+        varObjBin~.,
+        data = data2,
+        method = "avNNet",
+        linout = FALSE,
+        maxit = iter,
+        trControl = control_redes,
+        repeats = 5,
+        tuneGrid = nnetgrid,
+        trace = F)
+    # Añado la columna del parametro de iteraciones
+    rednnet$results$itera <- iter
+    # Voy incorporando los resultados a completo
+    completo <- rbind(completo, rednnet$results)
+}
+
+completo <- completo[order(completo$Accuracy),]
+
+ggplot(completo, aes(x = factor(itera), y = Accuracy,
+    color = factor(decay), pch = factor(size))) +
+    theme_minimal() +
+    geom_point(position = position_dodge(width = 0.5), size = 3)
+```
+
+```{r, echo=FALSE, fig.align='center', out.width="50%"}
+library(ggplot2)
+ggplot(completo, aes(x = factor(itera), y = Accuracy,
+    color = factor(decay), pch = factor(size))) +
+    theme_minimal() +
+    geom_point(position = position_dodge(width = 0.5), size = 3)
+```
+
+\normalsize
+
+Observando el gráfico con los resultados del tunning ajustando maxit, los
+mejores resultados en accuracy los entrega con un size de 10. En cuanto al decay
+muestra mejor comportamiento con decay 0.001 y 0.1. Con las iteraciones los
+mejores resultados los muestra entre 500 y 3000 aunque por simpleza con 500
+iteraciones esta bien.
+
+### Validación cruzada repetida para redes neuronales
+
+\normalsize
+
+A continuación y una vez obtenidos los parámetros mas adecuados utilizando
+tunning con criterio accuracy y controlando maxit = se generan las
+correspondientes validaciones cruzadas repetidas utilizando la función
+cruzadaavnnetbin() \linebreak
+
+\tiny
+
+```{r chunk-redes4, echo=TRUE, eval=FALSE}
+# Validacion cruzada repetida tunning maxit
+medias5 <- cruzadaavnnetbin(
+    data = data2,
+    vardep = "varObjBin",
+    listconti = c("h10pix", "temp90", "trees", "trees90", "Ymin", "Ymax",
+    "temp", "humid", "humid90"),
+    listclass = c(""),
+    grupos = 4,
+    sinicio = 1234,
+    repe = 5,
+    repeticiones = 5,
+    itera = 1000,
+    size = c(10),
+    decay = c(0.01))
+
+medias5$modelo <- "Red con maxit"
+```
+
+\normalsize
+
+### Comparación de medias y boxplot
+
+Utilizando la función genera_gráficos() se generan los gráficos de tipo boxplot
+para comparar los modelos creados.
+
+
+\tiny
+```{r chunk-redes6, eval=TRUE, echo=TRUE, out.width="70%", fig.align = 'center', results='hide'}
+genera_graficos(medias1, medias2, medias3, medias4, medias5)
+```
+
+\normalsize
+
+Observaciones:
+
+-   Si se compara con los modelos generados bajo regresión logística, hay un
+    aumento considerable del criterio AUC con redes neuronales, específicamente
+    la que se obtuvo con las variables seleccionadas con criterio AIC mas el
+    modelo que utilizo los parámetros que entrego el tunning con maxit.
+
+-   De todos modos esta es una comparativa inicial y aun se deben entrenar
+    nuevos algoritmos y modelados para tomar una decisión.

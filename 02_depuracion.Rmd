@@ -1,0 +1,95 @@
+---
+title: "02_depuracion"
+output:
+  html_document: default
+  pdf_document: default
+date: "2023-02-03"
+lang: "es-ES"
+urlcolor: blue
+---
+
+```{r include=FALSE}
+source("0_machine_learning.R")
+knitr::read_chunk("0_machine_learning.R")
+
+```
+
+# Analisis exploratorio de los datos
+
+\tiny
+
+```{r chunk-0basico, eval=TRUE, echo=FALSE}
+```
+
+\normalsize
+
+Como se observa anteriormente, son 14 columnas con 2000 filas, los tipos de datos son de tipo numérico incluyendo la variable objetivo **NoYes,** se realiza a continuacion una exploración mas detallada del dataset a estudiar.
+
+<!--revisar-->
+
+En cuanto a las observaciones sobre la variable independiente (*NoYes*) y observando el grafico de referencia, se observa un dataset un tanto desbalanceado pero no deberia afectar en demasia la ejecucion de esta practica.
+
+\tiny
+
+```{r chunk-0EDA, eval=TRUE, echo=FALSE, out.width = "50%", fig.align = "center"}
+```
+
+\pagebreak
+
+\normalsize
+
+A continuación se presentan algunos gráficos de apoyo al análisis exploratorio: \linebreak
+
+```{r chunk-0Explora, eval=TRUE, echo=FALSE, out.width="40%"}
+par(mfrow=c(2,2))
+# Correlaciones
+# correlacion <- inspect_cor(datos)
+# show_plot(correlacion)
+cor.plot(datos)
+
+# na
+na <- inspect_na(datos)
+show_plot(na)
+
+# histograma
+histograma <- inspect_num(datos)
+show_plot(histograma)
+
+# Tipos de datos por columna
+tipos <- inspect_types(datos)
+show_plot(tipos)
+
+
+```
+
+\normalsize
+
+Observaciones:
+
+-   Correlacion:
+
+-   Tipos de datos por columna: Datos tipo numeric e integer incluyendo la variable estudio.
+
+-   NA's: No se presenta un % alto de datos ausentes, en la siguiente seccion se trabajara en ello. trees y trees90 presentan un NA cercano al 0.6%
+
+-   Histograma:
+
+<!--revisar-->
+
+# Transformaciones
+
+Se realizan transformaciones sobre los datos, se eliminan columnas, tratamiento
+de datos faltantes y discretización de los datos:\linebreak
+
+
+\tiny
+```{r chunk-0FeatureEngineering, eval=TRUE, echo=TRUE}
+```
+
+```{r chunk-0preprocesado, eval=TRUE, echo=TRUE}
+```
+
+\normalsize
+Los datos han sido preparados y transformados, se continua con la selección de 
+variables
+

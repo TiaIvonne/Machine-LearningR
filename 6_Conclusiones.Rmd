@@ -1,0 +1,101 @@
+---
+title: "6_Conclusiones"
+output:
+  html_document: default
+  pdf_document: 
+    latex_engine: xelatex
+date: "2023-02-03"
+lang: "es-ES"
+urlcolor: blue
+editor_options: 
+  markdown: 
+    wrap: 80
+---
+
+```{r include=FALSE, warning=FALSE}
+load('myEnvironment.RData')
+source("./src/functions/librerias.R")
+knitr::opts_chunk$set(warning = FALSE) 
+knitr::read_chunk("5_Ensamblado.R")
+knitr::opts_chunk$set(out.width = "60%") 
+knitr::read_chunk("2_Bagging_RF.R")
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+\normalsize
+
+# Evaluacion del modelo ganador y conclusiones
+
+## Algoritmo a usar para este modelo
+El algoritmo ganador para esta practica es random forest
+
+## Matriz de confusion para el modelo escogido
+\tiny
+```{r chunk-rf7, echo = TRUE}
+
+```
+\normalsize
+Agregar conclusiones
+
+## Sensitividad, especificidad y precision
+
+
+## Tabla de parametros para regresion logistica
+\tiny
+```{r}
+summary(logistica)
+```
+\normalsize
+Comentar
+
+## Puntos de corte
+\tiny
+```{r}
+corte <- 0.3
+salida_rf$predcorte <- ifelse(salida_rf$Yes>corte, "Yes", "No")
+salida_rf$predcorte <- as.factor(salida_rf$predcorte)
+confusionMatrix(salida_rf$obs, salida_rf$predcorte, positive = "Yes")
+
+```
+\normalsize
+## Contraste de hipotesis entre algunos modelos
+\tiny
+```{r}
+lista_medias <- rbind(medias1,medias2,medias3, medias4, medias5,medias6, medias11,  medias12,medias13, medias14,medias15, medias16)
+modelos <- c("Logística", "randomforest")
+contraste <- lista_medias[which(lista_medias$modelo%in%modelos),]
+resultados <- t.test(contraste$tasa ~contraste$modelo)
+resultados
+```
+\normalsize
+## Visualpred
+
+Utilizando el script facilitado en los apuntes comparaciones basicas
+
+\tiny
+```{r, echo=FALSE,out.width="49%",out.height="20%",fig.cap="caption",fig.show='hold',fig.align='center'}
+knitr::include_graphics(c("./varObjBinz.jpg","./varObjBinbox.jpg"))
+                        
+```
+\normalsize
+## Tabla resumen
+Como punto final a esta practica se adjunta tabla resumen con auc y tasa de fallos para cada modelo evaluado 
+
+\tiny
+```{r}
+tabla_final <- lista_medias %>% 
+  group_by(modelo) %>%
+  summarise(tasa=mean(tasa))
+knitr::kable(tabla_final, "pipe", caption = "Tasa de fallos ")
+
+```
+```{r}
+tabla_final <- lista_medias %>% 
+  group_by(modelo) %>%
+  summarise(auc=mean(auc))
+knitr::kable(tabla_final, "pipe", caption = "Accuracy ")
+
+```
+

@@ -1,0 +1,76 @@
+---
+title: "03_seleccion"
+output:
+  html_document: default
+  pdf_document: default
+date: "2023-02-03"
+lang: "es-ES"
+urlcolor: blue
+editor_options: 
+  markdown: 
+    wrap: 80
+---
+
+```{r echo=FALSE, cache= F, include=FALSE}
+source("0_machine_learning.R", local = knitr::knit_global())
+knitr::read_chunk('0_machine_learning.R')
+```
+
+\normalsize
+
+# Seleccion de variables
+
+Se realiza una selección automática de variables de tipo stepwise para escoger
+las features que son mas relevantes para el posterior proceso de modelamiento y
+tuneado de algoritmos.
+
+\tiny
+
+```{r, chunk-0seleccion, eval = TRUE, echo = TRUE}
+```
+
+\normalsize
+
+Según el código anterior, las variables mas relevantes seleccionadas son:
+h10pix + temp90 + Ymin + Ymax + temp + humid + humid90 + trees + trees90, con
+las cuales se aplica la función steprepetidobinaria() con criterio "AIC" para
+remuestreo:
+
+\tiny
+
+```{r chunk-0steprepetido1, eval = TRUE, echo = TRUE}
+```
+
+\normalsize
+
+Se repite el mismo proceso pero esta vez con criterio "BIC": \tiny
+
+```{r chunk-0steprepetido2, eval = TRUE, echo = TRUE}
+```
+
+\normalsize
+
+Observando los resultados anteriores y obteniendo los set de variables se
+comparan con validación cruzada repetida:
+
+\tiny
+
+```{r chunk-0cruzadaslogistica, eval=TRUE, echo=TRUE}
+```
+
+\normalsize
+
+La función *genera_graficos()* toma las medias de los modelos generados y
+entrega el respectivo gráfico de tipo boxplot para facilitar la visualización
+(se agrega como anexo):
+
+\tiny
+
+```{r eval=TRUE, echo=TRUE, out.width="70%", fig.align = 'center', results='hide'}
+genera_graficos(medias1, medias2)
+```
+
+\normalsize
+Observaciones:
+
+-   El modelo de Logistica1 entrega mejores resultados que el modelo2

@@ -1,0 +1,71 @@
+---
+title: "introduccion"
+output: html_document
+date: '2023-01-26'
+lang: es-ES
+urlcolor: blue
+editor_options: 
+  markdown: 
+    wrap: 80
+---
+
+# Introducción
+
+\normalsize
+
+Para este trabajo de clasificación binaria utilizando diversas técnicas de
+machine learning, se ha decidido utilizar el set de datos ***Dengue prevalence
+by administrative region**.*
+
+Este dataset contiene información relevante sobre la prevalencia de la
+enfermedad por cada región administrativa de Nueva Zelanda (2000 regiones), es
+decir, si se ha observado la presencia del dengue o no, desde 1961 hasta 1990.
+
+El objetivo de este trabajo es entrenar diversos algoritmos de clasificación,
+con la finalidad de predecir una variable binaria y de tomar una decisión sobre
+cual modelo propuesto es el mas recomendado para el tipo de dataset con el que
+se está trabajando.
+
+Fuentes\linebreak
+
+1.  Repositorio: <https://vincentarelbundock.github.io/Rdatasets/datasets.html>
+
+2.  Explicación de los datos (en ingles):
+    <https://vincentarelbundock.github.io/Rdatasets/doc/DAAG/dengue.html>\linebreak
+
+3.  Descripción de las columnas que contiene el dataset dengue:
+
+    3.1 **humid:** Densidad de vapor promedio desde 1961 a 1990.
+
+    3.2 **humid90:** Percentil 90 para humedad.
+
+    3.3 **temp:** Temperatura promedio desde 1961 a 1990.
+
+    3.4 **temp90:** Percentil 90 para temperatura.
+
+    3.5 **h10pix:** Humedad máxima dentro de un radio de 10 pixeles.
+
+    3.6 **h10pix90:** Humedad máxima de variable temp90 dentro de un radio de 10
+    pixeles.
+
+    3.7 **trees:** Porcentaje de un área cubierta por arboles, dato entregado
+    por satélite.
+
+    3.8 **trees90:** Percentil 90 de la variable trees.
+
+    3.9 **NoYes:** Se ha observado la presencia de dengue, 1 indica si.
+    **Variable dependiente a estudiar.**
+
+    3.10 **Xmin:** Longitud mínima.
+
+    3.11 **Xmax:** Longitud máxima.
+
+    3.12 **Ymin:** Latitud mínima.
+
+    3.13 **Ymax:** Latitud máxima.
+
+    3.14 **X:** Indicador fila.
+
+4.  Dimension de los datos: 2000 filas x 14 columnas \tiny
+
+\pagebreak

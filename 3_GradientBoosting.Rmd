@@ -1,0 +1,147 @@
+---
+title: "3_GradientBoosting"
+output:
+  html_document: default
+  pdf_document: 
+    latex_engine: xelatex
+date: "2023-02-03"
+lang: "es-ES"
+urlcolor: blue
+editor_options: 
+  markdown: 
+    wrap: 80
+---
+
+```{r include=FALSE, warning=FALSE}
+load('myEnvironment.RData')
+source("./src/functions/librerias.R")
+knitr::opts_chunk$set(warning = FALSE) 
+knitr::read_chunk("3_GradientBoosting.R")
+```
+
+\normalsize
+
+## Stochastic Gradient Boosting
+
+### Tunning de gradient boosting
+
+Se realiza un primer tunning del algoritmo gradient boosting con caret, probando los parametros basicos de *shrinkage*, *n.minobsinnode* y *n.trees* mas las variables seleccionadas con *stepwise*
+
+\tiny
+```{r chunk-gbtuneo1, eval=FALSE, echo=TRUE}
+```
+
+```{r eval=TRUE, echo=FALSE}
+gbm$bestTune
+```
+```{r eval=TRUE, echo=FALSE, out.width="50%", fig.align='center'}
+plot(gbm)
+```
+
+\normalsize
+**Observaciones:**
+
+-  Segun gbm$bestTune los mejores resultados se consiguen con 1000 iteraciones, shrinkage de 0.1 y n.minobsinnode de 5. Los graficos muestran que en iteraciones desde 500 en adelante no se observan diferencias considerables y tienen a compartir resultados especialmente desde el shrinkage 0.06. El maximo accuracy estaria entre 0.06 y 0.10 de shrinkage ademas de minobsinnode 5 tal como lo indica bestTune.
+
+#### Estudio de early stopping
+
+\normalsize
+
+Se prueba con algunos parametros para buscar en que iteracion se estabiliza el algoritmo
+
+\tiny
+```{r chunk-gbtuneo2, echo=TRUE, eval=FALSE}
+```
+```{r eval=TRUE, echo=FALSE}
+gbm2$bestTune
+```
+```{r eval=TRUE, echo=FALSE, out.width="50%", fig.align='center'}
+plot(gbm2, xlab = "Boosting iterations")
+```
+\normalsize
+Importancia de variables
+
+\tiny
+``` {r, echo=FALSE, fig.show="hide"}
+tabla <- summary(gbm2)
+```
+```{r, echo=FALSE, out.width = "50%", fig.align = "center", results="hide"}
+barplot(tabla$rel.inf, names.arg = row.names(tabla), col = "#F5E1FD", 
+        main = "Importancia de variables - gradient boosting")
+```
+
+\normalsize
+**Observaciones:**
+
+-  Pendiente, preguntar si se usan todas las variables o las seleccionadas con stepwise
+
+### Validacion cruzada para gradient boosting
+
+Se genera la validación cruzada para gradient boosting utilizando los parametros obtenidos en el proceso anterior de tunning:
+
+\tiny
+```{r chunk-gbvalidacion1, eval=FALSE, echo=TRUE, comment=""}
+```
+
+\normalsize
+### Comparacion de medias y boxplot
+
+Utilizando la función genera_gráficos() se generan los gráficos para realizar
+comparación de medias y evaluar los modelos
+\tiny
+```{r chunk-gbmedias1, eval=TRUE, echo=TRUE, fig.align='center', out.width="50%",results='hide'}
+```
+
+\normalsize
+Observaciones:
+
+-  gbm() tiene un buen auc y esta en el medio del grafico de la tasa de fallos, de todas maneras no alcanza los niveles que muestra un random forest o un bagging para este dataset.
+
+
+\normalsize
+
+## Xgboost
+
+### Tunning de Xgboost
+\tiny
+```{r chunk-tuneoxgboost, eval=FALSE, echo=TRUE}
+```
+```{r eval=TRUE, echo=FALSE, out.width="50%", fig.align='center'}
+plot(xgbm)
+knitr::kable(xgbm$bestTune, "pipe")
+```
+\normalsize
+Observaciones:
+
+-  Pendiente, es necesario hacer feature selection?
+
+#### Estudio de early stopping con xgboost
+\tiny
+```{r chunk-tuneoxgboost1, eval=FALSE, echo=TRUE}
+```
+```{r eval=TRUE, echo=FALSE, out.width="50%", fig.align='center'}
+par(mfrow=c(1,2))
+plot(xgbm2)
+plot(xgbm3)
+
+```
+```{r eval=TRUE, echo=FALSE, out.width="50%", fig.align='center'}
+knitr::kable(xgbm2$bestTune, "pipe")
+knitr::kable(xgbm3$bestTune, "pipe")
+```
+```{r chunk-tuneoxgboost2, eval=FALSE, echo=TRUE}
+```
+
+\normalsize
+### Comparacion de medias y boxplot
+
+Utilizando la función genera_gráficos() se generan los gráficos para realizar
+comparación de medias y evaluar los modelos
+\tiny
+```{r chunk-mediasxgboost, eval=TRUE, echo=TRUE, fig.align='center', out.width = "50%", results='hide'}
+```
+
+\normalsize
+Observaciones:
+
+-  Pendiente, es necesario hacer feature selection?
