@@ -72,7 +72,6 @@ rpart.plot(arbol2, extra = 105, tweak = 1.2, type = 1, nn = TRUE)
 ## ---- chunk-arboles5 ----
 
 # Tuneado sobre complejidad del arbol con Rpart
-
 arbol_min5 <- rpart(factor(varObjBin) ~ ., data = dengue_arbol, minbucket = 5, cp = 0)
 arbol_min30 <- rpart(factor(varObjBin) ~ ., data = dengue_arbol, minbucket = 30, cp = 0)
 arbol_min60 <- rpart(factor(varObjBin) ~ ., data = dengue_arbol, minbucket = 60, cp = 0)
@@ -102,10 +101,8 @@ colSums(is.na(dengue_arbol1)) > 0
 
 # Tunning con minbucket en bucle
 set.seed(12345)
-control_arbol <- trainControl(method = "cv",
-    number = 4,
-    classProbs = TRUE, 
-    savePredictions = "all") 
+control_arbol <- trainControl(method = "repeatedcv", number = 4, 
+    repeats = 5, savePredictions = "all", classProbs = TRUE)
 
 arbolgrid <-  expand.grid(cp = c(0))
 tabla_resultados <-c() 
@@ -137,12 +134,16 @@ knitr::kable(tabla_resultados, "pipe")
 
 
 ## ---- chunk-arboles9 ----
+set.seed(12345)
+control_arbol1 <- trainControl(method = "cv", number = 4, 
+    savePredictions = "all", classProbs = TRUE)
+
 arbol4 <- train(factor(varObjBin) ~ h10pix + temp90 + Ymin + Ymax + temp + 
     humid + humid90 + trees + trees90,
     data = dengue_arbol1, 
     method = "rpart", 
     minbucket = 20, 
-    trControl = control_arbol, 
+    trControl = control_arbol1, 
     tuneGrid = arbolgrid)
 
 ## ---- chunk-arboles10 ----
@@ -155,7 +156,8 @@ fourfoldplot(salida4_confusion$table)
 # Curva roc
 curvaroc <-roc(response = salida_a4$obs, predictor = salida_a4$Yes)
 auc <- curvaroc$auc
-plot.roc(roc(response = salida_a4$obs, predictor = salida_a4$Yes), main = "Curva ROC arbol con minbucket = 20")
+plot.roc(roc(response = salida_a4$obs, predictor = salida_a4$Yes), 
+         main = "Curva ROC arbol")
 
 
 ## ---- chunk-arboles12 ----

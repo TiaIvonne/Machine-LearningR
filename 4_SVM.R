@@ -15,7 +15,8 @@ dengue <- readRDS(file = "./data/processed/dengue.rds")
 
 SVMgrid <- expand.grid(C = c(0.01, 0.05, 0.1, 0.2, 0.5, 1, 2, 5, 10))
 set.seed(12345)
-control_svm <- trainControl(method = "cv", number = 4, savePredictions = "all")
+control_svm <- trainControl(method = "repeatedcv", number = 4, repeats = 5,
+     savePredictions = "all", classProbs = TRUE)
 
 svm_1 <-train(
     data = dengue,

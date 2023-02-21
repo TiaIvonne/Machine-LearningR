@@ -25,11 +25,8 @@ gb_grid <- expand_grid(
     n.trees = c(100, 500, 1000, 2000, 3000, 5000),
     interaction.depth = c(2))
 
-control_gb <- trainControl(
-    method = "cv", 
-    number = 4, 
-    savePredictions = "all", 
-    classProbs = TRUE)
+control_gb <- trainControl(method = "repeatedcv", number = 4, repeats = 5,
+    savePredictions = "all", classProbs = TRUE)
 
 gbm <- train(
     factor(varObjBin) ~ h10pix + temp90 + trees + trees90 + Ymin + Ymax + temp +
@@ -109,11 +106,8 @@ xgbmgrid <- expand.grid(
     colsample_bytree = 1, 
     subsample = 1)
 
-control_xgboost <-trainControl(
-    method = "cv", 
-    number = 4, 
-    savePredictions = "all", 
-    classProbs = TRUE)
+control_xgboost <-trainControl(method = "repeatedcv", number = 4, repeats = 5,
+    savePredictions = "all", classProbs = TRUE)
 
 xgbm <- train(
     factor(varObjBin) ~h10pix + temp90 + trees + trees90 + Ymin + Ymax + temp +
@@ -143,11 +137,8 @@ xgbmgrid2 <- expand.grid(
     subsample = 1)
 
 set.seed(12345) 
-control_xgboost1 <-trainControl(
-    method = "cv", 
-    number = 4, 
-    savePredictions = "all", 
-    classProbs = TRUE)
+control_xgboost1 <-trainControl(method = "repeatedcv", number = 4, repeats = 5,
+     savePredictions = "all", classProbs = TRUE)
 
 xgbm2 <- train(
     factor(varObjBin) ~h10pix + temp90 + trees + trees90 + Ymin + Ymax + temp +
@@ -162,11 +153,8 @@ plot(xgbm2)
 
 # Se cambia la semilla para observar variaciones
 set.seed(45673) 
-control_xgboost2 <-trainControl(
-    method = "cv", 
-    number = 4, 
-    savePredictions = "all", 
-    classProbs = TRUE)
+control_xgboost2 <-trainControl(method = "repeatedcv", number = 4, repeats = 5,
+    savePredictions = "all", classProbs = TRUE)
 
 xgbm3 <- train(
     factor(varObjBin) ~h10pix + temp90 + trees + trees90 + Ymin + Ymax + temp +

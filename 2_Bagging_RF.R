@@ -18,11 +18,8 @@ dengue <- readRDS(file = "./data/processed/dengue.rds")
 
 rfgrid <- expand.grid(mtry = c(6))
 set.seed(12345)
-control_bagging <- trainControl(
-    method = "cv", 
-    number = 4, 
-    savePredictions = "all", 
-    classProbs = TRUE)
+control_bagging <- trainControl(method = "repeatedcv", number = 4, repeats = 5,
+    savePredictions = "all", classProbs = TRUE)
 
 bagging <- train(
     data = dengue, 
@@ -159,11 +156,8 @@ genera_graficos(medias6, medias7, medias8, medias9, medias10, medias10)
 set.seed(12345)
 rfgrid_rf <- expand.grid(mtry = c(3, 4, 5, 6, 7, 8, 9, 10, 11))
 
-control_rf <- trainControl(
-    method = "cv",
-    number = 4,
-    savePredictions = "all",
-    classProbs = TRUE)
+control_rf <- trainControl(method = "repeatedcv", number = 4, repeats = 5,
+    savePredictions = "all", classProbs = TRUE)
 
 random_forest <- train(
     factor(varObjBin) ~.,
@@ -235,10 +229,11 @@ medias11$modelo <- "randomforest"
 genera_graficos(medias1, medias2, medias3, medias4, medias5,medias6, medias9,medias11)
 
 ## ---- chunk-rf6 ----
+## Es para sacar la matriz de confusion
 set.seed(12345)
 control_rf1 <- trainControl(
     method = "cv",
-    number = 4,
+    number = 10,
     savePredictions = "all",
     classProbs = TRUE)
 
@@ -261,10 +256,12 @@ final_randomForest <- train(
 salida_rf <- final_randomForest$pred
 salidarf_conf <- confusionMatrix(salida_rf$pred, salida_rf$obs)
 fourfoldplot(salidarf_conf$table)
-salidarf_conf
+confusionMatrix(salida_rf$pred, salida_rf$obs, mode = "everything")
+
+
 ## ---- chunk-rf8 ----
 # Curva roc
 curvaroc <- roc(salida_rf$obs, salida_rf$Yes)
 auc <- curvaroc$auc
 plot.roc(roc(response = salida_rf$obs, predictor = salida_rf$Yes), 
-         main = "Curva ROC Random Forest Classifier")
+    main = "Curva ROC Random Forest Classifier")

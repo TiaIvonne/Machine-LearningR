@@ -16,8 +16,8 @@ dengue <- readRDS(file = "./data/processed/dengue.rds")
 # 1. Tuneo -------------------------------------------------------------------
 ## ---- chunk-redes1 ----
 set.seed(12345)
-control_redes <- trainControl(method = "repeatedcv", number=4, repeats=5,
-    savePredictions = "all")
+control_redes <- trainControl(method = "repeatedcv", number = 4, repeats = 5,
+    savePredictions = "all", classProbs = TRUE)
 
 avnnetgrid <- expand.grid(
     size = c(5, 10, 15, 20),
@@ -62,7 +62,8 @@ listconti = c("h10pix", "temp90", "trees", "trees90", "Ymin", "Ymax",
 
 data2 <- dengue[,c(listconti, vardep)]
 
-control_maxit <- trainControl(method = "cv", number = 4, savePredictions = "all") 
+control_maxit <- trainControl(method = "repeatedcv", number = 4, repeats = 5,
+        savePredictions = "all", classProbs = TRUE) 
 
 set.seed(12345)
 nnetgrid <-  expand.grid(size = c(5, 10), decay = c(0.01, 0.1, 0.001), bag = F)

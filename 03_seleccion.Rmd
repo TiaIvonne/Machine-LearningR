@@ -61,8 +61,8 @@ comparan con validación cruzada repetida:
 \normalsize
 
 La función *genera_graficos()* toma las medias de los modelos generados y
-entrega el respectivo gráfico de tipo boxplot para facilitar la visualización
-(se agrega como anexo):
+entrega el respectivo gráfico de tipo boxplot para facilitar la visualización:
+fuente en el siguiente repositorio: <https://github.com/TiaIvonne/MasterUCM-MachineLearningR/blob/master/h2o%20python/autoML_dengue.ipynb>
 
 \tiny
 

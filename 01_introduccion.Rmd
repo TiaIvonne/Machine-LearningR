@@ -66,6 +66,6 @@ Fuentes\linebreak
 
     3.14 **X:** Indicador fila.
 
-4.  Dimension de los datos: 2000 filas x 14 columnas \tiny
+4.  Dimensión de los datos: 2000 filas x 14 columnas \tiny
 
 \pagebreak

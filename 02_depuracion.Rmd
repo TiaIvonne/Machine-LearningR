@@ -23,11 +23,14 @@ knitr::read_chunk("0_machine_learning.R")
 
 \normalsize
 
-Como se observa anteriormente, son 14 columnas con 2000 filas, los tipos de datos son de tipo numérico incluyendo la variable objetivo **NoYes,** se realiza a continuacion una exploración mas detallada del dataset a estudiar.
+Como se observa anteriormente, son 14 columnas con 2000 filas, los tipos de datos son de tipo numérico incluyendo la variable objetivo **NoYes,** se realiza a continuación una exploración mas detallada del dataset a estudiar.
 
-<!--revisar-->
+En cuanto a las observaciones sobre la variable independiente (*NoYes*) y observando el gráfico y tabla referencia, se tiene:
 
-En cuanto a las observaciones sobre la variable independiente (*NoYes*) y observando el grafico de referencia, se observa un dataset un tanto desbalanceado pero no deberia afectar en demasia la ejecucion de esta practica.
+Para un total de 831 observaciones en la clase minoritaria con 12 variables input (se omite columna X y la objetivo) 69 observaciones por parámetro. Respecto a los porcentajes y sobretodo el porcentaje de observaciones de la clase minoritaria da una idea de las métricas a tener en cuenta en la evaluación posterior de los modelos, es decir, un accuracy mayor a 0.58 y una tasa de fallos menor a 0.41 debería mejorar el resultado base.
+
+Se observa un ligero desbalance el cual no debería afectar el proceso de modelado, no se aplican técnicas de balanceo artificial de los datos.
+
 
 \tiny
 
@@ -43,7 +46,7 @@ A continuación se presentan algunos gráficos de apoyo al análisis exploratori
 ```{r chunk-0Explora, eval=TRUE, echo=FALSE, out.width="40%"}
 par(mfrow=c(2,2))
 # Correlaciones
-# correlacion <- inspect_cor(datos)
+# correlación <- inspect_cor(datos)
 # show_plot(correlacion)
 cor.plot(datos)
 
@@ -66,20 +69,18 @@ show_plot(tipos)
 
 Observaciones:
 
--   Correlacion:
+-   Correlación:
 
 -   Tipos de datos por columna: Datos tipo numeric e integer incluyendo la variable estudio.
 
--   NA's: No se presenta un % alto de datos ausentes, en la siguiente seccion se trabajara en ello. trees y trees90 presentan un NA cercano al 0.6%
+-   NA's: No se presenta un % alto de datos ausentes, pero deben ser tratados para evitar problemas en el proceso, en la siguiente sección se trabajará en ello. trees y trees90 presentan un NA cercano al 0.6%
 
--   Histograma:
+-   Histograma: Se observan variables que no siguen una distribución normal, X y NoYes deben ser separadas del dataset (X por no ser relevante es un índice y NoYes es la objetivo )
 
-<!--revisar-->
 
 # Transformaciones
 
-Se realizan transformaciones sobre los datos, se eliminan columnas, tratamiento
-de datos faltantes y discretización de los datos:\linebreak
+Se realizan transformaciones sobre los datos, eliminación de columnas con escasa relevancia, tratamiento de datos faltantes y estandarización de los datos continuos:\linebreak
 
 
 \tiny

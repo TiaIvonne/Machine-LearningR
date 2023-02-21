@@ -20,7 +20,7 @@ dim(datos)
 ## ---- chunk-0EDA ----
 # Exploración inicial al conjunto de datos
 cuenta <- dplyr::count(datos, datos$NoYes)
-porcentaje <- round(prop.table(table(datos$NoYes)) * 100, 2)
+porcentaje <- round(prop.table(table(datos$NoYes)), 2)
 t <- cbind(cuenta, porcentaje)
 t <- t[, -3]
 knitr::kable(t, col.names = c('NoYes', 'cuenta', 'porcentaje'),'pipe')
@@ -49,6 +49,7 @@ par(mfrow = c(2,2))
 correlacion <- inspect_cor(datos)
 show_plot(correlacion)
 corPlot(datos)
+
 
 # mplot uso memoria
 memoria <- inspect_mem(datos)
@@ -96,7 +97,6 @@ input <- as.data.frame(datos2[, -(9)])
 
 ## ---- chunk-0preprocesado ----
 # Pre procesado, recategorizar, dummies, estandarizar etc
-
 # Estandarizacion
 temp <- input %>% mutate_if(is.numeric, scale)
 head(temp)
@@ -106,7 +106,7 @@ base <- data.frame(varObjBin, temp)
 
 # La variable objetivo se cambia a alfanumerico yes, no
 base$varObjBin <- ifelse(base$varObjBin == 1, "Yes", "No")
-knitr::kable(head(base), "pipe")
+knitr::kable(head(base), "pipe") %>% kable_styling(latex_options="scale_down")
 
 
 ## ---- chunk-0seleccion ----
@@ -173,7 +173,9 @@ medias1 <- cruzadalogistica(
     listconti = c("h10pix", "temp90", "trees", "trees90", 
     "Ymin", "Ymax", "temp", "humid", "humid90"),
     listclass = c(""), 
-    grupos = 4, sinicio = 1234, repe = 5)
+    grupos = 4, 
+    sinicio = 1234, 
+    repe = 5)
 
 medias1$modelo <- "Logística1"
 
@@ -200,23 +202,28 @@ base2 <- data.frame(varObjBin, temp)
 saveRDS(base2, file = "./data/processed/dengue2.rds")
 
 
-
 ## ----- Train logistica para obtener curva roc
-control_logi <- trainControl(method = "repeatedcv", number = 4, classProbs = TRUE,
-                             savePredictions = "all")
+set.seed(12345)
+control_logi <- trainControl(method = "repeatedcv", number = 4, repeats = 5,
+    savePredictions = "all", classProbs = TRUE)
+
 logistica <- train(factor(varObjBin) ~ h10pix + temp90 + Ymin + Ymax + temp + humid + 
         humid90 + trees + trees90, 
         data = data, 
         method = "glm", 
-        trControl = control_logi)
+        trControl = control_logi
+        )
 
-# Matriz de confusion
+# Matriz de confusión
 salida_logi <- logistica$pred
 salidalogi_conf <- confusionMatrix(salida_logi$pred, salida_logi$obs)
-fourfoldplot(salidalogi_conf$table)
+caret::confusionMatrix(logistica, "none")
 
 # Curva roc
 curvaroc <- roc(salida_logi$obs, salida_logi$Yes)
 auc <- curvaroc$auc
 plot.roc(roc(response = salida_logi$obs, predictor = salida_logi$Yes), 
          main = "Curva ROC Logistic Regression")
+
+
+
