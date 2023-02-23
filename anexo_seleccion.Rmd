@@ -13,9 +13,11 @@ editor_options:
 ---
 
 ```{r include=FALSE}
-source("anexo_seleccion.R")
+load('myEnvironment.RData')
+source("./src/functions/librerias.R")
+source("./anexo_seleccion.R")
 source("./src/functions/genera_graficos.R")
-knitr::read_chunk("anexo_seleccion.R")
+knitr::read_chunk("./anexo_seleccion.R")
 knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
 
 ```
@@ -24,10 +26,10 @@ knitr::opts_chunk$set(warning = FALSE, message = FALSE)
 
 # Anexos
 
-## Otros metodos de seleccion de variables
+## Otros métodos de selección de variables
 
 Como un complemento a la selección de variables de tipo **Stepwise** que se ha
-estudiado en el apartado de selección de variables se ha decidido estudiar otras
+estudiado en el apartado de selección se ha decidido estudiar otras
 alternativas de selección de features utilizando diversas técnicas que se
 detallan a continuación:
 
@@ -45,7 +47,6 @@ se obtienen los siguientes resultados:
 
 \normalsize
 
-Agregar un comentario
 
 ### Utilizando *MARS: Multivariate Adaptive Regression Splines*
 
@@ -84,8 +85,8 @@ algún corte de tipo manual en las variables.
 ### Utilizando RFE con caret
 
 Eliminación recursiva de características o RFE en sus siglas en ingles, es un
-estimador que asigna pesos a las características del dataset que se quiere
-estudiar
+estimador que asigna pesos a las características del dataset que se desea
+estudiar.
 
 \tiny
 
@@ -101,19 +102,14 @@ para comparar:
 
 \tiny
 
-```{r chunk-modelos, eval=FALSE, echo=TRUE}
+```{r chunk-modelos, eval=TRUE, echo=FALSE, results='hide', fig.align='center',out.width="50%"}
 ```
 
-
-
-```{r figurename, echo=FALSE, fig.cap="my caption", out.width = '50%'}
-
-```
 
 \normalsize
 Conclusiones:
 
--   A modo general la selección de variables realizada con stepwiseAIC (Logistica1), sigue siendo la que presenta mejor AUC y menor tasa de fallos, ademas de menor varianza por lo que se seguirá trabajando con ese modelo.
+-   A modo general la selección de variables realizada con stepwise (Logistica1), sigue siendo la que presenta mejor AUC y menor tasa de fallos, ademas de menor varianza por lo que se seguirá trabajando con ese modelo.
 
 
 

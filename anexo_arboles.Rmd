@@ -34,8 +34,6 @@ Primer modelado, modelo con todas las variables del dataset para realizar
 estudio de importancia de variables (que se hizo en el apartado de selección con
 Stepwise pero se prefiere agregarlo a la practica)
 
-Preguntar si en arboles trabajo con las variables que da el modelo o me ajusto a
-lo que dio la selección de variables con stepwise
 
 \tiny
 ```{r chunk-arboles1, eval=FALSE, echo=TRUE}
@@ -46,13 +44,10 @@ Representación gráfica de las variables consideradas relevantes y árbol:
 ```{r chunk-arboles2, eval=TRUE, echo=TRUE, fig.align='center', out.width="50%"}
 ```
 \normalsize
-Observaciones:
+**Observaciones**
 
--   Según el gráfico importancia de variables Árbol1, las varibles predictoras
-    mas relevantes serian, h10pix, h10pix90, humid90, Ymin, humid e Ymax.
-
--   agregar observaciones del árbol
-
+- Según el gráfico importancia de variables Árbol1, las varibles predictoras
+mas relevantes serian, h10pix, h10pix90, humid90, Ymin, humid e Ymax.
 
 Se prueba modelando un nuevo árbol esta vez usando maxsurrogate = 0, solo como complemento puesto que el archivo dengue no contiene datos faltantes: \linebreak
 
@@ -68,12 +63,10 @@ Representación gráfica de las variables consideradas relevantes y árbol:
 ```
 
 \normalsize
-Observaciones:
+**Observaciones**
 
 -   Según el gráfico importancia de variables Arbol2, las varibles predictoras
     mas relevantes serian, h10pix e Ymax.
-
--   agregar observaciones del árbol
 
 ### Tunning de algoritmos usando rpart()
 
@@ -94,7 +87,7 @@ Representación gráfica del tunning de minbucket \linebreak
 ```
 
 \normalsize
-Observaciones
+**Observaciones**
 
 Se puede apreciar que con minbucket 5 se genera un modelo complejo y con minbucket 60
 un modelo básico, para encontrar un equilibrio y ver otras opciones de minbucket a continuación se profundiza en el tuneado utilizando caret de R

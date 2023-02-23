@@ -14,7 +14,7 @@ knitr::read_chunk("0_machine_learning.R")
 
 ```
 
-# Analisis exploratorio de los datos
+# Análisis exploratorio de los datos
 
 \tiny
 
@@ -69,7 +69,7 @@ show_plot(tipos)
 
 Observaciones:
 
--   Correlación:
+-   Correlación: Se observan variables altamente correladas que podrían afectar la independencia del modelo. Sin embargo no se eliminan y se espera tratarlas adecuadamente con el método stepwise para selección de variables que se estudiará más adelante.
 
 -   Tipos de datos por columna: Datos tipo numeric e integer incluyendo la variable estudio.
 
@@ -91,6 +91,5 @@ Se realizan transformaciones sobre los datos, eliminación de columnas con escas
 ```
 
 \normalsize
-Los datos han sido preparados y transformados, se continua con la selección de 
-variables
+Los datos han sido preparados y transformados por lo tanto se continua con el apartado de selección de variables.
 

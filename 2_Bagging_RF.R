@@ -149,7 +149,11 @@ medias10$modelo <- "bagging1500"
 
 ## ---- chunk-bagging5 ----
 # genera graficos para comparar tamanio muestral de bagging
-genera_graficos(medias6, medias7, medias8, medias9, medias10, medias10)
+genera_graficos(medias6, medias7, medias8, medias9, medias10)
+
+## ---- chunk-bagging6 ----
+# genera graficos para comparar tamanio muestral de bagging
+genera_graficos(medias1, medias2, medias3, medias4, medias5, medias6)
 
 ## ---- chunk-rf1 ----
 # 2. Tuneo random forest -----------------------------------------------------
@@ -226,7 +230,7 @@ medias11 <- cruzadarfbin(data = dengue, vardep = "varObjBin",
 medias11$modelo <- "randomforest"
 ## ---- chunk-rf5 ----
 # 3. Compara medias ----------------------------------------------------------
-genera_graficos(medias1, medias2, medias3, medias4, medias5,medias6, medias9,medias11)
+genera_graficos(medias1, medias2, medias3, medias4, medias5,medias6,medias11)
 
 ## ---- chunk-rf6 ----
 ## Es para sacar la matriz de confusion

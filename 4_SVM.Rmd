@@ -34,21 +34,15 @@ Para el SVM lineal se necesita la constante de regularización C. A continuació
 se construyen un par de modelos buscando un valor C optimo utilizando las
 variables seleccionadas con *stepwise*:
 
-Como en los modelos anteriores, se utiliza el archivo dengue.RDS que contiene
-los datos preprocesados
-
 \tiny
-
 ```{r chunk-svmdatos, echo=TRUE, eval=FALSE}
 ```
 
 \tiny
-
 ```{r chunk-svmlineal1, echo=TRUE, eval=FALSE}
 ```
 
 \normalsize
-
 Se muestran los resultados y el gráfico correspondiente
 
 \tiny
@@ -93,8 +87,8 @@ entrena el modelo:
 
 \normalsize
 
-Se despliegan los resultados \tiny
-
+Se despliegan los resultados 
+\tiny
 ```{r chunk-svmPoli2, echo=FALSE, eval=TRUE, out.width="50%", fig.align='center'}
 ```
 

@@ -1,9 +1,9 @@
 ---
 title: "6_Conclusiones"
 output:
-  html_document: default
   pdf_document: 
     latex_engine: xelatex
+  html_document: default
 date: "2023-02-03"
 lang: "es-ES"
 urlcolor: blue
@@ -26,15 +26,14 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 \normalsize
 
-# Evaluacion del modelo ganador y conclusiones
+# Evaluación del modelo ganador y conclusiones
 
 ## Algoritmo a usar para este modelo
-Se ha decidido para esta practica que el algoritmo ganador es *random forest classifier*, los resultados son de los mejores observados en grafico, combinado con AUC y tasa de fallos, presentando resultados competitivos si se compara con los generados via ensamblado, sumado a menor complejidad y costo computacional son los indicadores que han sido considerados para tomar esta decision.
+Se ha decidido para esta práctica que el algoritmo ganador es *random forest classifier*, los resultados son de los mejores observados en gráfico, combinado con AUC y tasa de fallos, presentando resultados competitivos si se compara con los generados vía ensamblado, sumado a menor complejidad y costo computacional son los indicadores que han sido considerados para tomar esta decisión.
 
-## Matriz de confusion para el modelo escogido
+## Matriz de confusión para el modelo escogido
 \tiny
-```{r chunk-rf7, echo = TRUE}
-
+```{r chunk-rf7, echo = FALSE, eval=TRUE, fig.align='center', out.width="30%"}
 ```
 
 
@@ -63,7 +62,7 @@ es de un valor de 0.94.
 
 
 \normalsize
-## Tabla de parametros para regresion logistica
+## Tabla de parámetros para regresión logística
 \tiny
 ```{r}
 summary(logistica)
@@ -81,8 +80,8 @@ salida_rf$predcorte <- as.factor(salida_rf$predcorte)
 confusionMatrix(salida_rf$obs, salida_rf$predcorte, positive = "Yes")
 
 ```
-
-- Solo como experimento adicional, no se observa hay mejora, al contrario, la accuracy desciende de 0.93 a 0.91, pero si ha aumentado la especificidad, se sigue detectando bien los valores negativos. 
+\normalsize
+- Solo como experimento adicional, no se observa mejora, al contrario, la accuracy desciende de 0.93 a 0.91, pero si ha aumentado la especificidad, se sigue detectando bien los valores negativos. 
 
 
 \normalsize
@@ -102,18 +101,21 @@ Utilizando el script facilitado en los apuntes se realizan algunas comparaciones
 el paquete visualpred.
 
 \tiny
-```{r, echo=FALSE,out.width="49%",out.height="20%",fig.cap="caption",fig.show='hold',fig.align='center'}
+```{r, echo=FALSE,out.width="49%",out.height="20%",fig.show='hold',fig.align='center'}
 knitr::include_graphics(c("./varObjBinz.jpg","./varObjBinbox.jpg"))
 ```
 
 \normalsize
 - En general las clases se separan adecuadamente pero se observan algunas islas de observaciones sin clasificar correctamente. Con un modelado adicional en el script evaluando diferentes modelos y con criterio auc, random forest sigue mostrando buenos resultados y menor varianza que el resto de los modelos.
 \normalsize
+
+
 ## Tabla resumen
-Como punto final a esta practica se adjunta tabla resumen con auc y tasa de fallos para cada modelo evaluado 
+Como punto final a esta práctica se adjunta tabla resumen con auc y tasa de fallos para cada modelo evaluado 
 
 \tiny
 ```{r}
+lista_medias <- rbind(medias1,medias2,medias3, medias4, medias5,medias6, medias11, medias12, medias13, medias14,medias15, medias16)
 tabla_final <- lista_medias %>% 
   group_by(modelo) %>%
   summarise(tasa=mean(tasa))
@@ -124,7 +126,7 @@ knitr::kable(tabla_final, "pipe", caption = "Tasa de fallos ")
 tabla_final <- lista_medias %>% 
   group_by(modelo) %>%
   summarise(auc=mean(auc))
-knitr::kable(tabla_final, "pipe", caption = "Accuracy ")
+knitr::kable(tabla_final, "pipe", caption = "Auc ")
 
 ```
 

@@ -1,10 +1,10 @@
 # Anexo, seleccion de variables 
 # La variable independiente deber ser numerica o no funciona
-
+source("./src/functions/librerias.R")
 source("./src/functions/cruzadas avnnet y log binaria.R")
 source("./src/functions/genera_graficos.R")
 dengue2 <- readRDS(file = "./data/processed/dengue2.rds")
-data <- readRDS(file="./data/processed/dengue.rds")
+
 
 dengue2 <- as.data.frame(dengue2)
 
@@ -46,10 +46,16 @@ predictors(res_rfe)
 # graficos
 # plot(results, type=c("g", "o"))
 
+
+
+
+
 ## ---- chunk-modelos ----
 # Generado con libreria party
+dengue3 <- dengue2
+dengue3$varObjBin <- ifelse(dengue3$varObjBin == 1, "Yes", "No")
 anexo1 <- cruzadalogistica(
-    data = data,
+    data = dengue3,
     vardep = "varObjBin", listconti = c("humid", "humid90","temp", "temp90",
     "h10pix", "h10pix90"),
     listclass = c(""), 
@@ -60,7 +66,7 @@ anexo1$modelo <- "log-party"
 
 # Generado con MARS
 anexo2 <- cruzadalogistica(
-    data = data,
+    data = dengue3,
     vardep = "varObjBin", 
     listconti = c("h10pix", "Xmax", "temp90", "Ymax", "Ymin", "temp", "Xmin",
                   "trees"),
@@ -71,7 +77,7 @@ anexo2$modelo <- "log-mars"
 
 # Generado con Boruta
 anexo3 <- cruzadalogistica(
-    data = data,
+    data = dengue3,
     vardep = "varObjBin", 
     listconti = c("h10pix", "Xmax", "Xmin", "h10pix90", "Ymax"),
     listclass = c(""), 
@@ -82,14 +88,14 @@ anexo3$modelo <- "log-boruta"
 
 # Generado con RFE
 anexo4 <- cruzadalogistica(
-    data = data,
+    data = dengue3,
     vardep = "varObjBin", 
     listconti = c("Xmax", "h10pix","Xmin","h10pix90","Ymin","temp" ),
     listclass = c(""), 
     grupos = 4, sinicio = 1234, repe = 5)
-
 anexo4$modelo <- "log-RFE"
 
 
+genera_graficos(medias1, anexo1, anexo2, anexo3, anexo4)
 
 

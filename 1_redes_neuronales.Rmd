@@ -70,11 +70,11 @@ knitr::kable(redavnnet1$results, "pipe")
 
 \normalsize
 
-Observando la tabla y con base el Accuracy, los parámetros a considerar son un size de 10 con un decay de 0.010.
+Observando la tabla y con base el Accuracy, los parámetros a considerar son un size de 10 con un decay de 0.010 o un size de 15, en ambos casos con criterio accuracy son los que muestran mejores resultados.
 
 \normalsize
 
-Se prueba el modelo una vez mas utilizando las variables seleccionadas con criterio BIC (son solo dos las predictoras mas la variable objetivo)
+Se prueba el modelo una vez mas utilizando las variables seleccionadas con criterio BIC.
 
 \tiny
 
@@ -97,12 +97,11 @@ La siguiente tabla muestra los resultados con las variables obtenidas con BIC
 \tiny
 
 ```{r, echo=FALSE, fig.align='center'}
-knitr::kable(redavnnet1$results, "pipe")
+knitr::kable(redavnnet2$results, "pipe")
 ```
 
 \normalsize
-
-Agregar observaciones
+El accuracy ha bajado y se ve el efecto de utilizar un menor número de variables predictoras.
 
 ### Tunning de redes neuronales con MAXIT
 
@@ -139,7 +138,7 @@ for( iter in listaiter)
         repeats = 5,
         tuneGrid = nnetgrid,
         trace = F)
-    # Añado la columna del parametro de iteraciones
+    # Añado la columna del parámetro de iteraciones
     rednnet$results$itera <- iter
     # Voy incorporando los resultados a completo
     completo <- rbind(completo, rednnet$results)
@@ -181,7 +180,7 @@ cruzadaavnnetbin() \linebreak
 \tiny
 
 ```{r chunk-redes4, echo=TRUE, eval=FALSE}
-# Validacion cruzada repetida tunning maxit
+# Validación cruzada repetida tunning maxit
 medias5 <- cruzadaavnnetbin(
     data = data2,
     vardep = "varObjBin",
@@ -214,12 +213,12 @@ genera_graficos(medias1, medias2, medias3, medias4, medias5)
 
 \normalsize
 
-Observaciones:
+**Observaciones**
 
 -   Si se compara con los modelos generados bajo regresión logística, hay un
     aumento considerable del criterio AUC con redes neuronales, específicamente
     la que se obtuvo con las variables seleccionadas con criterio AIC mas el
-    modelo que utilizo los parámetros que entrego el tunning con maxit.
+    modelo que utilizo los parámetros que entrego el tunning con maxit.Con los resultados obtenidos vía tunning con maxit, también mejora la varianza como se puede observar en el gráfico.
 
--   Recalcar que es una comparativa inicial y aún se deben entrenar
+-   Es una comparación temprana por lo que se deben entrenar
     nuevos algoritmos y modelados para tomar una decisión.

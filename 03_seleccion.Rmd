@@ -21,7 +21,7 @@ knitr::read_chunk('0_machine_learning.R')
 # Selección de variables
 
 Se realiza una selección automática de variables de tipo stepwise para escoger
-las features que son realmente relevantes para el posterior proceso de modelamiento y *tunning* de algoritmos.
+las features que podrían ser relevantes para el posterior proceso de modelamiento y *tunning* de algoritmos.
 
 \tiny
 

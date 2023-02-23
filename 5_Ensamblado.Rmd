@@ -28,20 +28,20 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Ensamblado de algoritmos
 
-**Nota:** El código completo de la practica de ensamblados se encuentra en el
+**Nota:** El código completo de la práctica de ensamblados se encuentra en el
 siguiente repositorio de GitHub, para no extender innecesariamente el reporte:
 <https://github.com/TiaIvonne/Machine-LearningR/blob/master/5_Ensamblado.R>
 
-## Preparacion del ensamblado con *caret ensemble*
+## Preparación del ensamblado con *caret ensemble*
 
-Antes de comenzar el modelado, se deben tener decididos los parámetros para los
+Antes de comenzar el modelado, se han decidido los parámetros para los
 algoritmos que serán ensamblados (proceso obtenido anteriormente en el apartado
 de tunning) para los siguientes algoritmos:
 
-Redes neuronales Gradient boosting machine Random Forest Classifier Support
+Redes neuronales, Gradient boosting machine, Random Forest Classifier, Support
 Vector Machines (lineal, polinomial y radial)
 
-Con los resultados obtenidos se construyen los *grids* y se realiza el
+Con los resultados obtenidos se construyen las *grids* y se realiza el
 modelamiento
 
 \tiny
@@ -65,8 +65,6 @@ summary(ensemble)
 ```
 
 \normalsize
-
-Observaciones
 
 ## Validacion cruzada repetida y boxplot
 
@@ -176,7 +174,8 @@ ordenados
 
 ### Paso 7, tabla con resultados
 
-Se genera tabla con resultados para la tasa de fallos y el área under curve.
+Se genera tabla con resultados para la tasa de fallos y el área under curve.\linebreak
+
 **Nota:** Solo se despliegan las primeras salidas para no extender el documento.
 \tiny
 
@@ -212,12 +211,12 @@ En AUC respectivamente los modelos con mayor *accuracy* son predi55, predi57 y
 predi52.
 
 Como se observa en el gráfico son demasiados modelos, en el apartado siguiente
-solo se trafican los mejores modelos de ensamblado y se comparan con los
-algoritmos sin ensamblar
+solo se grafican los mejores modelos de ensamblado y se comparan con los
+algoritmos sin ensamblar.
 
 ### Paso 9, comparacion de mejores modelos
 
-Los mejores ensamblados son los modelos predi57, predi55, predi52 y predi 60,
+Los mejores ensamblados son los modelos predi57, predi55, predi52 y predi60,
 estos se muestran a continuación comparándolos con los modelos originales sin
 ensamblar
 

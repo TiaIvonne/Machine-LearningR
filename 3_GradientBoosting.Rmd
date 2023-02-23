@@ -25,126 +25,187 @@ knitr::read_chunk("3_GradientBoosting.R")
 
 ### Tunning de gradient boosting
 
-Se realiza un primer tunning del algoritmo gradient boosting con caret, probando los parámetros básicos de *shrinkage*, *n.minobsinnode* y *n.trees* mas las variables seleccionadas con *stepwise*
+Se realiza un primer tunning del algoritmo gradient boosting con caret, probando
+los parámetros básicos de *shrinkage*, *n.minobsinnode* y *n.trees* mas las
+variables seleccionadas con *stepwise*
 
 \tiny
+
 ```{r chunk-gbtuneo1, eval=FALSE, echo=TRUE}
 ```
 
 ```{r eval=TRUE, echo=FALSE}
 gbm$bestTune
 ```
+
 ```{r eval=TRUE, echo=FALSE, out.width="50%", fig.align='center'}
 plot(gbm)
 ```
 
 \normalsize
-**Observaciones:**
 
--  Según gbm$bestTune los mejores resultados se consiguen con 1000 iteraciones, shrinkage de 0.1 y n.minobsinnode de 5. Los graficos muestran que en iteraciones desde 500 en adelante no se observan diferencias considerables y tienen a compartir resultados especialmente desde el shrinkage 0.06. El máximo accuracy estaría entre 0.06 y 0.10 de shrinkage ademas de minobsinnode 5 tal como lo indica bestTune.
+**Observaciones**
+
+-   Según gbm\$bestTune los mejores resultados se consiguen con 1000
+    iteraciones, shrinkage de 0.1 y n.minobsinnode de 5. Los graficos muestran
+    que en iteraciones desde 500 en adelante no se observan diferencias
+    considerables y tienen a compartir resultados especialmente desde el
+    shrinkage 0.06. El máximo accuracy estaría entre 0.06 y 0.10 de shrinkage
+    ademas de minobsinnode 5 tal como lo indica bestTune.
 
 #### Estudio de early stopping
 
 \normalsize
 
-Se prueba con algunos parámetros para buscar en que iteración se estabiliza el algoritmo
+Se prueba con algunos parámetros para buscar en que iteración se estabiliza el
+algoritmo
 
 \tiny
+
 ```{r chunk-gbtuneo2, echo=TRUE, eval=FALSE}
 ```
+
 ```{r eval=TRUE, echo=FALSE}
 gbm2$bestTune
 ```
+
 ```{r eval=TRUE, echo=FALSE, out.width="50%", fig.align='center'}
 plot(gbm2, xlab = "Boosting iterations")
 ```
+
 \normalsize
+
 Importancia de variables
 
 \tiny
-``` {r, echo=FALSE, fig.show="hide"}
+
+```{r, echo=FALSE, fig.show="hide"}
 tabla <- summary(gbm2)
 ```
+
 ```{r, echo=FALSE, out.width = "50%", fig.align = "center", results="hide"}
 barplot(tabla$rel.inf, names.arg = row.names(tabla), col = "#F5E1FD", 
         main = "Importancia de variables - gradient boosting")
 ```
 
 \normalsize
-**Observaciones:**
 
--  Realizando el estudio de early stopping con las variables habituales ya seleccionadas y revisando los graficos, entre 1000 y 2000 n.trees comienza a estabilizarse el algoritmo, presentando resultados similares entre 2000 y 5000. Como se privilegia la simplicidad en el próximo apartado se realizan pruebas con n.trees de 2000.
+**Observaciones**
+
+-   Realizando el estudio de early stopping con las variables habituales ya
+    seleccionadas y revisando los graficos, entre 1000 y 2000 n.trees comienza a
+    estabilizarse el algoritmo, presentando resultados similares entre 2000
+    y 5000. Como se privilegia la simplicidad en el próximo apartado se realizan
+    pruebas con n.trees de 2000.
 
 ### Validacion cruzada para gradient boosting
 
-Se genera la validación cruzada para gradient boosting utilizando los parámetros obtenidos en el proceso anterior de tunning:
+Se genera la validación cruzada para gradient boosting utilizando los parámetros
+obtenidos en el proceso anterior de tunning:
 
 \tiny
+
 ```{r chunk-gbvalidacion1, eval=FALSE, echo=TRUE, comment=""}
 ```
 
 \normalsize
+
 ### Comparacion de medias y boxplot
 
 Utilizando la función genera_gráficos() se generan los gráficos para realizar
-comparación de medias y evaluar los modelos
-\tiny
+comparación de medias y evaluar los modelos \tiny
+
 ```{r chunk-gbmedias1, eval=TRUE, echo=TRUE, fig.align='center', out.width="50%",results='hide'}
 ```
 
 \normalsize
-Observaciones:
 
--  gbm() tiene un buen auc y esta en el medio del gráfico de la tasa de fallos, pero se observa mayor varianza comparándolo con otros modelos y no alcanza los niveles de accuracy que muestra un random forest o un bagging para este dataset.
+**Observaciones**
 
+-   gbm() tiene un buen auc y esta en el medio del gráfico de la tasa de fallos,
+    pero se observa mayor varianza comparándolo con otros modelos y no alcanza
+    los niveles de accuracy que muestra un random forest o un bagging para este
+    dataset.
 
 \normalsize
 
 ## Xgboost
 
 ### Tunning de Xgboost
+
 \tiny
+
 ```{r chunk-tuneoxgboost, eval=FALSE, echo=TRUE}
 ```
+
 ```{r eval=TRUE, echo=FALSE, out.width="50%", fig.align='center'}
 plot(xgbm)
 knitr::kable(xgbm$bestTune, "pipe")
 ```
-\normalsize
-Observaciones:
 
-- En la tabla anterior indica los que podrían ser mejores parámetros para el modelo, tomando en cuenta esta tabla el se modela el estudio de *early stopping* para confirmar lo indicado en tabla respecto al numero de interacciones sugeridas.
+\normalsize
+
+**Observaciones**
+
+-   En la tabla anterior indica los que podrían ser mejores parámetros para el
+    modelo, tomando en cuenta esta tabla el se modela el estudio de *early
+    stopping* para confirmar lo indicado en tabla respecto al numero de
+    interacciones sugeridas.
 
 #### Estudio de early stopping con xgboost
+
 \tiny
+
 ```{r chunk-tuneoxgboost1, eval=FALSE, echo=TRUE}
 ```
+
 ```{r eval=TRUE, echo=FALSE, out.width="50%", fig.align='center'}
 par(mfrow=c(1,2))
 plot(xgbm2)
 plot(xgbm3)
 
 ```
+
+\normalsize
+
+**Observaciones**
+
+-   En el código anterior se probó con una semilla diferente para ver si hay
+    cambios en las interacciones. Aunque el accuracy es similar en ambos casos
+    en su punto mas alto, con una semilla indica un numero de interacciones
+    menor a lo recomendado en el primer tunning y con semilla distinta a la
+    usual alcanza la estabilidad a partir de 1000 boosting iterations. \tiny
+
 ```{r eval=TRUE, echo=FALSE, out.width="50%", fig.align='center'}
 knitr::kable(xgbm2$bestTune, "pipe")
 knitr::kable(xgbm3$bestTune, "pipe")
 ```
+
+\normalsize
+### Validacion cruzada para xgboost
+Con los resultados obtenidos anteriormente se construye la validacion cruzada
+para xgboost y la posterior comparación con los demás modelos.
+\tiny
 ```{r chunk-tuneoxgboost2, eval=FALSE, echo=TRUE}
 ```
 
-Observaciones
-
-- En el código anterior se probó con una semilla diferente para ver si hay cambios en las interacciones. Aunque el accuracy es similar en ambos casos en su punto mas alto, con una semilla indica un numero de interacciones menor a lo recomendado en el primer tunning y con semilla distinta a la usual alcanza la estabilidad a partir de 1000 boosting iterations.
-
 \normalsize
+
 ### Comparacion de medias y boxplot
 
 Utilizando la función genera_gráficos() se generan los gráficos para realizar
-comparación de medias y evaluar los modelos
-\tiny
+comparación de medias y evaluar los modelos \tiny
+
 ```{r chunk-mediasxgboost, eval=TRUE, echo=TRUE, fig.align='center', out.width = "50%", results='hide'}
 ```
 
 \normalsize
-Observaciones:
-- Xgbm alcanza resultados muy buenos en relación a auc y tasa de fallos, inclusive con varianza mas pequeña, demostrando la popularidad con la que cuenta el algoritmo,  quedando a la cabeza del gráfico mostrado. Como punto a considerar, computacionalmente es mas costoso que un random forest o bagging que también presenta muy buenos resultados por lo que se debe tener este punto en cuenta al momento de elegir modelo ganador.
+
+**Observaciones**
+
+-   Xgbm alcanza resultados muy buenos en relación a auc y tasa de fallos,
+    inclusive con varianza mas pequeña, demostrando la popularidad con la que
+    cuenta el algoritmo, quedando a la cabeza del gráfico mostrado. Como punto a
+    considerar, computacionalmente es mas costoso que un random forest o bagging
+    que también presenta muy buenos resultados por lo que se debe tener este
+    punto en cuenta al momento de elegir modelo ganador.
